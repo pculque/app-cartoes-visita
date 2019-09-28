@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="card_height">480dp</dimen>
+    <dimen name="card_width">320dp</dimen>
+
+</resources>
