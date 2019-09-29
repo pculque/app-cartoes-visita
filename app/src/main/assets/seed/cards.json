@@ -1,0 +1,67 @@
+[
+  {
+    "type": 1,
+    "thumbnail": 1,
+    "logo": 1,
+    "backgroundColor": "#FF0004",
+    "labelColor": "#FFFFFF",
+    "valueColor": "#FFFFFF",
+    "primaryValue": "Seu Nome",
+    "secondaryLabel": "Canal",
+    "secondaryValue": "Seu numero",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": ""
+  },
+  {
+    "type": 2,
+    "thumbnail": 2,
+    "logo": 2,
+    "backgroundColor": "#3C5A99",
+    "labelColor": "#FFFFFF",
+    "valueColor": "#FFFFFF",
+    "primaryValue": "Seu Nome",
+    "secondaryLabel": "Mobile",
+    "secondaryValue": "Seu numero",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": ""
+  },
+  {
+    "type": 3,
+    "thumbnail": 3,
+    "logo": 3,
+    "backgroundColor": "#FFFFFF",
+    "labelColor": "#212121",
+    "valueColor": "#212121",
+    "primaryValue": "Seu Nome",
+    "secondaryLabel": "Mobile",
+    "secondaryValue": "Seu numero",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": ""
+  },
+  {
+    "type": 4,
+    "thumbnail": 4,
+    "logo": 4,
+    "backgroundColor": "#1EBEA5",
+    "labelColor": "#FFFFFF",
+    "valueColor": "#FFFFFF",
+    "primaryValue": "Seu Nome",
+    "secondaryLabel": "Mobile",
+    "secondaryValue": "Seu numero",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": ""
+  },
+  {
+    "type": 5,
+    "thumbnail": 5,
+    "logo": 5,
+    "backgroundColor": "#F8F8FA",
+    "labelColor": "#707070",
+    "valueColor": "#707070",
+    "primaryValue": "Nome Completo",
+    "secondaryLabel": "Perfil",
+    "secondaryValue": "Seu perfil",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": ""
+  }
+]

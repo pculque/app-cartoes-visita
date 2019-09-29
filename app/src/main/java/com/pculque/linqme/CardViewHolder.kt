@@ -16,7 +16,8 @@ import android.view.View
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.item_card.view.*
 
-class CardViewHolder private constructor(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
+class CardViewHolder private constructor(private val binding: ItemCardBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun create(
             inflater: LayoutInflater,
@@ -44,12 +45,14 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
         var qrCodeContent = ""
         when (cardViewModel.type) {
             TypeCard.YOUTUBE -> {
+                binding.cardView.logo.setImageResource(R.drawable.logo_youtube)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "CANAL"
+                binding.cardView.primary_label.text = "Canal"
                 qrCodeContent = "https://www.youtube.com/channel/UCPl_3zCQnCB4Iv79UD_i-5A"
             }
             TypeCard.WHATSAPP -> {
+                binding.cardView.logo.setImageResource(R.drawable.logo_whatsapp)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
                 binding.cardView.primary_label.text = "MOBILE"
@@ -57,6 +60,7 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
                     "https://wa.me/5511987854040?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
             }
             TypeCard.FACBOOK -> {
+                binding.cardView.logo.setImageResource(R.drawable.logo_facebook)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
                 binding.cardView.primary_label.visibility = View.INVISIBLE
@@ -70,6 +74,7 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
                 qrCodeContent = "https://www.instagram.com/daddyyankee/?hl=pt-br"
             }
             TypeCard.INSTAGRAM -> {
+                binding.cardView.logo.setImageResource(R.drawable.logo_instagram)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
                 binding.cardView.primary_label.text = "FOLLOW"

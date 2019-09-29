@@ -1,18 +1,48 @@
 package com.pculque.linqme
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 class Card {
     var id: Int = 0
 
+    @Expose
+    @SerializedName("logo")
     var logo: Int = 0
+
+    @Expose
+    @SerializedName("type")
+    var type: Int = 0
+
+    @Expose
+    @SerializedName("thumbnail")
     var thumbnail: Int = 0
-    var backgroundColor: Int = 0
-    var labelColor: Int = 0
-    var valueColor: Int = 0
+    @Expose
+    @SerializedName("backgroundColor")
+    var backgroundColor: String = ""
+
+    @Expose
+    @SerializedName("labelColor")
+    var labelColor: String = ""
+    @Expose
+    @SerializedName("valueColor")
+    var valueColor: String = ""
+    @Expose
+    @SerializedName("primaryValue")
     var primaryValue: String = ""
+    @Expose
+    @SerializedName("secondaryLabel")
     var secondaryLabel: String = ""
+    @Expose
+    @SerializedName("secondaryValue")
     var secondaryValue: String = ""
+    @Expose
+    @SerializedName("auxiliaryLabel")
     var auxiliaryLabel: String = ""
+    @Expose
+    @SerializedName("auxiliaryValue")
     var auxiliaryValue: String = ""
+
 
     constructor(id: Int, primaryValue: String) {
         this.id = id
@@ -26,9 +56,9 @@ class Card {
     constructor(
         logo: Int,
         thumbnail: Int,
-        backgroundColor: Int,
-        labelColor: Int,
-        valueColor: Int,
+        backgroundColor: String,
+        labelColor: String,
+        valueColor: String,
         primaryValue: String,
         secondaryLabel: String,
         secondaryValue: String,
@@ -47,5 +77,28 @@ class Card {
         this.auxiliaryValue = auxiliaryValue
     }
 
+    constructor()
 
+    fun getTypeId(): TypeCard {
+        return when (this.type) {
+            1 -> TypeCard.YOUTUBE
+            2 -> TypeCard.FACBOOK
+            3 -> TypeCard.INSTAGRAM
+            4 -> TypeCard.WHATSAPP
+            5 -> TypeCard.LINKEDIN
+            6 -> TypeCard.BUSSINES
+            else -> TypeCard.WHATSAPP
+        }
+    }
+
+    fun getLogoDrawable(): Int {
+        return when (this.type) {
+            1 -> R.drawable.logo_youtube
+            2 -> R.drawable.logo_facebook
+            3 -> R.drawable.logo_instagram
+            4 -> R.drawable.logo_whatsapp
+            5 -> R.drawable.linkedin_logo
+            else -> 0
+        }
+    }
 }

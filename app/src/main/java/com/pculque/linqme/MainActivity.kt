@@ -8,19 +8,27 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.amyu.stack_card_layout_manager.StackCardLayoutManager
+import com.pculque.linqme.database.CardHelper
 
 import kotlinx.android.synthetic.main.activity_main.*
 
+import com.google.gson.GsonBuilder
+import com.google.gson.internal.`$Gson$Types`
+import com.pculque.FileUtils
+
 class MainActivity : AppCompatActivity() {
 
-    private var typeCardSelected = TypeCard.BUSSINES
+    companion object {
+        private const val MAX_ITEM_COUNT: Int = 6
+    }
+
+    private val dbHandler = CardHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,26 +36,13 @@ class MainActivity : AppCompatActivity() {
         supportActionBar.apply {
             title = ""
         }
-        val dbHandler = MindOrksDBOpenHelper(this, null)
-        val user = Card("s")
-        dbHandler.addName(user)
-        Toast.makeText(this, "Added to database", Toast.LENGTH_LONG).show()
-
-        val cursor = dbHandler.getAllName()
-        cursor!!.moveToFirst()
-        //tvDisplayName.append((cursor.getString(cursor.getColumnIndex(MindOrksDBOpenHelper.COLUMN_PRIMARY_VALUE))))
-        while (cursor.moveToNext()) {
-            Log.e(
-                "Debug",
-                cursor.getString(cursor.getColumnIndex(MindOrksDBOpenHelper.COLUMN_PRIMARY_VALUE))
-            )
-            Log.e("Debug", "\n")
-        }
-        cursor.close()
 
         button_camera.setOnClickListener {
             startActivity(Intent(this, CameraScannerActivity::class.java))
         }
+
+        //dbHandler.clear()
+        setupCards()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val adapter = StackCardAdapter(applicationContext).apply {
@@ -57,132 +52,16 @@ class MainActivity : AppCompatActivity() {
                     cardView,
                     cardView.transitionName
                 )
-                typeCardSelected = cardViewModel.type
+                val id = cardViewModel.id
 
                 startActivityWithOptions(compat) {
-                    DetailActivity.createIntent(
-                        it,
-                        cardViewModel.primaryValue.value!!,
-                        cardViewModel.secondaryLabel.value!!,
-                        cardViewModel.secondaryValue.value!!,
-                        cardViewModel.auxiliaryLabel.value!!,
-                        cardViewModel.auxiliaryValue.value!!,
-                        cardViewModel.backgroundColor.value!!,
-                        cardViewModel.labelColor.value!!,
-                        cardViewModel.valueColor.value!!,
-                        cardViewModel.logo.value!!,
-                        cardViewModel.thumbnail.value!!
-                    ).putExtra("type", typeCardSelected)
+                    DetailActivity.createIntent(it).putExtra("card_id", id)
                 }
             }
-
-            submitList(
-                listOf(
-                    CardViewModel(
-
-                        backgroundColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FF0004"))
-                        },
-                        logo = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.logo_youtube)
-                        }, labelColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, valueColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, thumbnail = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.thumbnail)
-                        }, secondaryLabel = MutableLiveData<String>().apply {
-                            postValue("CHANNEL")
-                        }, secondaryValue = MutableLiveData<String>().apply {
-                            postValue("YouTube Channel")
-                        }, primaryValue = MutableLiveData<String>().apply {
-                            postValue("Amauri Zerillo Jr.")
-                        }, auxiliaryLabel = MutableLiveData<String>().apply {
-                            postValue("")
-                        }, auxiliaryValue = MutableLiveData<String>().apply {
-                            postValue("")
-                        }
-                        , type = TypeCard.YOUTUBE
-                    ),
-
-                    CardViewModel(
-                        backgroundColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#3C5A99"))
-                        },
-                        logo = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.logo_facebook)
-                        }, labelColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, valueColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, thumbnail = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.thumbnail)
-                        }, secondaryLabel = MutableLiveData<String>().apply {
-                            postValue("")
-                        }, secondaryValue = MutableLiveData<String>().apply {
-                            postValue("")
-                        }, primaryValue = MutableLiveData<String>().apply {
-                            postValue("Amauri Zerillo Jr.")
-                        }, auxiliaryLabel = MutableLiveData<String>().apply {
-                            postValue("")
-                        }, auxiliaryValue = MutableLiveData<String>().apply {
-                            postValue("")
-                        }, type = TypeCard.FACBOOK
-                    ),
-                    CardViewModel(
-                        backgroundColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        },
-                        logo = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.logo_instagram)
-                        }, labelColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#212121"))
-                        }, valueColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#212121"))
-                        }, thumbnail = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.thumbnail)
-                        }, secondaryLabel = MutableLiveData<String>().apply {
-                            postValue("FOLLOW")
-                        }, secondaryValue = MutableLiveData<String>().apply {
-                            postValue("@linqme")
-                        }, primaryValue = MutableLiveData<String>().apply {
-                            postValue("Amauri Zerillo Jr.")
-                        }, auxiliaryLabel = MutableLiveData<String>().apply {
-                            postValue("FOLLOW:")
-                        }, auxiliaryValue = MutableLiveData<String>().apply {
-                            postValue("@instagram")
-                        }, type = TypeCard.INSTAGRAM
-
-                    ),
-                    CardViewModel(
-                        backgroundColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#1EBEA5"))
-                        },
-                        logo = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.logo_whatsapp)
-                        }, labelColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, valueColor = MutableLiveData<Int>().apply {
-                            postValue(Color.parseColor("#FFFFFF"))
-                        }, thumbnail = MutableLiveData<Int>().apply {
-                            postValue(R.drawable.thumbnail)
-                        }, secondaryLabel = MutableLiveData<String>().apply {
-                            postValue("MOBILE:")
-                        }, secondaryValue = MutableLiveData<String>().apply {
-                            postValue("+55 11 9 8785-4040")
-                        }, primaryValue = MutableLiveData<String>().apply {
-                            postValue("Amauri Zerillo Jr.")
-                        }, auxiliaryLabel = MutableLiveData<String>().apply {
-                            postValue("MOBILE:")
-                        }, auxiliaryValue = MutableLiveData<String>().apply {
-                            postValue("+55 11 9 8785-4040")
-                        }, type = TypeCard.WHATSAPP
-                    )
-                )
-            )
+            submitList(getCardViewModel())
         }
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = StackCardLayoutManager(5)
+        recyclerView.layoutManager = StackCardLayoutManager(MAX_ITEM_COUNT)
         val itemDecor = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
                 override fun onMove(
@@ -199,6 +78,69 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         itemDecor.attachToRecyclerView(recyclerView)
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    private fun getCardViewModel(): List<CardViewModel> {
+        val list = mutableListOf<CardViewModel>()
+        dbHandler.getAllCards().map {
+            list.add(CardViewModel(
+                backgroundColor = MutableLiveData<Int>().apply {
+                    postValue(Color.parseColor(it.backgroundColor))
+                },
+                labelColor = MutableLiveData<Int>().apply {
+                    postValue(Color.parseColor(it.labelColor))
+                }, valueColor = MutableLiveData<Int>().apply {
+                    postValue(Color.parseColor(it.valueColor))
+                }, thumbnail = MutableLiveData<Int>().apply {
+                    postValue(R.drawable.profile)
+                }, secondaryLabel = MutableLiveData<String>().apply {
+                    postValue(it.secondaryLabel)
+                }, secondaryValue = MutableLiveData<String>().apply {
+                    postValue(it.secondaryValue)
+                }, primaryValue = MutableLiveData<String>().apply {
+                    postValue(it.primaryValue)
+                }, auxiliaryLabel = MutableLiveData<String>().apply {
+                    postValue(it.auxiliaryLabel)
+                }, auxiliaryValue = MutableLiveData<String>().apply {
+                    postValue(it.auxiliaryValue)
+                }, type = it.getTypeId()
+                , logo = MutableLiveData<Int>().apply {
+                    postValue(it.getLogoDrawable())
+                }, id = it.id
+            )
+            )
+        }
+        return list
+    }
+
+    private fun setupCards() {
+        if (dbHandler.isSetupDB()) {
+            Log.e("Debug", "Setup is ready")
+            return
+        }
+        val builder = GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+        val gson = builder.create()
+        val type =
+            `$Gson$Types`.newParameterizedTypeWithOwner(null, List::class.java, Card::class.java)
+        val cardList = gson.fromJson<List<Card>>(
+            FileUtils.loadJSONFromAsset(
+                this,
+                AppConstants.SEED_DATABASE_QUESTIONS
+            ),
+            type
+        )
+        Log.i("Debug", "Setup Json card list ${cardList.size}")
+
+        cardList.map {
+            val id = dbHandler.addCard(it)
+            Log.e("Debug", "Insert Card id: $id")
+        }
+
+        Log.i("Debug", "Size " + dbHandler.size())
     }
 
 
@@ -225,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -235,4 +178,5 @@ class MainActivity : AppCompatActivity() {
     ) {
         startActivity(function(applicationContext), options.toBundle())
     }
+
 }
