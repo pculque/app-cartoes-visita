@@ -29,10 +29,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val dbHandler = CardHelper(this)
+    lateinit var adapter: StackCardAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        adapter = StackCardAdapter(this)
         supportActionBar.apply {
             title = ""
         }
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         setupCards()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = StackCardAdapter(applicationContext).apply {
+        adapter.apply {
             onItemClickListener = { cardView, cardViewModel ->
                 val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this@MainActivity,
@@ -82,6 +85,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        adapter.apply {
+            submitList(getCardViewModel())
+        }
     }
 
     private fun getCardViewModel(): List<CardViewModel> {

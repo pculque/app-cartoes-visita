@@ -81,7 +81,14 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
                 qrCodeContent = "https://www.instagram.com/daddyyankee/?hl=pt-br"
 
             }
+            TypeCard.LINKEDIN -> {
+                binding.cardView.logo.setImageResource(R.drawable.logo_linkedin)
+                binding.cardView.auxiliary_label.visibility = View.INVISIBLE
+                binding.cardView.auxiliary_value.visibility = View.INVISIBLE
+                binding.cardView.primary_label.text = "Seguir"
+                qrCodeContent = "https://www.linkedin.com/in/${cardViewModel.primaryValue}/"
 
+            }
         }
         val qrgEncoder = QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
 

@@ -47,6 +47,18 @@ class CardHelper(context: Context) {
         db.delete(AppDBOpenHelper.TABLE_NAME, null, null)
     }
 
+    fun updateCard(card: Card) {
+        val cv = ContentValues()
+        cv.put(
+            AppDBOpenHelper.COLUMN_PRIMARY_VALUE,
+            card.primaryValue
+        )
+        cv.put(AppDBOpenHelper.COLUMN_SECONDARY_VALUE, card.secondaryValue)
+        cv.put(AppDBOpenHelper.COLUMN_AUXILIARY_VALUE, card.auxiliaryValue)
+        val db = dbHandler.writableDatabase
+
+        db.update(AppDBOpenHelper.TABLE_NAME, cv, "${AppDBOpenHelper.COLUMN_ID}=" + card.id, null)
+    }
 
     fun getCard(id: Int): Card? {
         val card = Card()

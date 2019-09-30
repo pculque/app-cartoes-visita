@@ -80,7 +80,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.primaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(InputType.TYPE_CLASS_TEXT, title_text_view)
+                showCreateCategoryDialog(card, InputType.TYPE_CLASS_TEXT, title_text_view)
             }
             findViewById<TextView>(R.id.primary_label).apply {
                 text = card.secondaryLabel
@@ -90,7 +90,11 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.secondaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, primary_value)
+                showCreateCategoryDialog(
+                    card,
+                    InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
+                    primary_value
+                )
             }
             findViewById<TextView>(R.id.auxiliary_label).apply {
                 text = card.auxiliaryLabel
@@ -100,7 +104,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.auxiliaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(InputType.TYPE_CLASS_TEXT, auxiliary_value)
+                showCreateCategoryDialog(card, InputType.TYPE_CLASS_TEXT, auxiliary_value)
             }
             findViewById<ImageView>(R.id.thumbnail).apply {
                 setImageResource(R.drawable.profile)
@@ -155,6 +159,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                         qrCodeContent = "https://www.facebook.com/zuck"
                         primaryContainer.visibility = View.INVISIBLE
                     }
+                    TypeCard.LINKEDIN -> {
+                        auxiliary_label.visibility = View.INVISIBLE
+                        auxiliary_value.visibility = View.INVISIBLE
+                        qrCodeContent = "https://www.linkedin.com/in/${card.primaryValue}"
+                        //primaryContainer.visibility = View.INVISIBLE
+                    }
                 }
 
                 val qrgEncoder =
@@ -202,7 +212,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun showCreateCategoryDialog(inputType: Int, textView: TextView) {
+    private fun showCreateCategoryDialog(card: Card, inputType: Int, textView: TextView) {
         val context = this
         val builder = AlertDialog.Builder(context)
 
@@ -224,7 +234,10 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
             if (isValid) {
                 // do something
+                card.primaryValue = categoryEditText.text.toString()
                 textView.text = categoryEditText.text.toString()
+                dbHandler.updateCard(card)
+
             }
 
             if (isValid) {

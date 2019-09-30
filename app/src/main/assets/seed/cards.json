@@ -8,7 +8,7 @@
     "valueColor": "#FFFFFF",
     "primaryValue": "Seu Nome",
     "secondaryLabel": "Canal",
-    "secondaryValue": "Seu numero",
+    "secondaryValue": "Seu Canal",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   },
@@ -20,8 +20,8 @@
     "labelColor": "#FFFFFF",
     "valueColor": "#FFFFFF",
     "primaryValue": "Seu Nome",
-    "secondaryLabel": "Mobile",
-    "secondaryValue": "Seu numero",
+    "secondaryLabel": "",
+    "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   },
@@ -33,8 +33,8 @@
     "labelColor": "#212121",
     "valueColor": "#212121",
     "primaryValue": "Seu Nome",
-    "secondaryLabel": "Mobile",
-    "secondaryValue": "Seu numero",
+    "secondaryLabel": "FOLLOW",
+    "secondaryValue": "@meu_id",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   },
@@ -55,12 +55,12 @@
     "type": 5,
     "thumbnail": 5,
     "logo": 5,
-    "backgroundColor": "#F8F8FA",
-    "labelColor": "#707070",
-    "valueColor": "#707070",
+    "backgroundColor": "#0077B5",
+    "labelColor": "#FFFFFF",
+    "valueColor": "#FFFFFF",
     "primaryValue": "Nome Completo",
-    "secondaryLabel": "Perfil",
-    "secondaryValue": "Seu perfil",
+    "secondaryLabel": "Empresa",
+    "secondaryValue": "Cargo ",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   }

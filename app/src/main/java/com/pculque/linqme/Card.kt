@@ -97,7 +97,7 @@ class Card {
             2 -> R.drawable.logo_facebook
             3 -> R.drawable.logo_instagram
             4 -> R.drawable.logo_whatsapp
-            5 -> R.drawable.linkedin_logo
+            5 -> R.drawable.logo_linkedin
             else -> 0
         }
     }
