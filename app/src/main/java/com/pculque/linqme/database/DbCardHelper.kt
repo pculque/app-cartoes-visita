@@ -43,7 +43,7 @@ class AppDBOpenHelper(
         const val TABLE_NAME = "card"
         const val COLUMN_ID = "_id"
         const val COLUMN_LOGO = "logo"
-        const val COLUMN_TYPE = "logo"
+        const val COLUMN_TYPE = "type"
         const val COLUMN_THUMBNAIL = "thumbnail"
         const val COLUMN_BACKGROUND_COLOR = "backgroundColor"
         const val COLUMN_LABEL_COLOR = "labelColor"
