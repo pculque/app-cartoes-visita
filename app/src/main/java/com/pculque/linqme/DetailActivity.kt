@@ -29,12 +29,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
+import br.com.concrete.canarinho.watcher.MascaraNumericaTextWatcher
 
 import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.pculque.linqme.database.CardHelper
+import java.lang.ref.WeakReference
 import java.util.*
 
 
@@ -48,6 +50,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         // Give your color picker dialog unique IDs if you have multiple dialogs.
         private const val DIALOG_ID = 0
         private var TAG = DetailActivity::class.java.simpleName
+        private var id: Int = 0
 
     }
 
@@ -56,14 +59,16 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     private val dbHandler = CardHelper(this)
     private var isCustomCard = false
     private var images = ArrayList<Image>()
+    private var qrCodeContent = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-        val id = intent.getIntExtra("card_id", 0)
+        id = intent.getIntExtra("card_id", 0)
 
         val card = dbHandler.getCard(id)
+
 
         Log.e(TAG, " ${card?.id}")
 
@@ -80,7 +85,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.primaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(card, InputType.TYPE_CLASS_TEXT, title_text_view)
+                showCreateCategoryDialogForPrimaryValue(
+                    loadText = card.primaryValue,
+                    card = card,
+                    textView = title_text_view,
+                    typeField = TypeField.PRIMARY
+                )
             }
             findViewById<TextView>(R.id.primary_label).apply {
                 text = card.secondaryLabel
@@ -90,10 +100,11 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.secondaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(
-                    card,
-                    InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS,
-                    primary_value
+                showCreateCategoryDialogForPrimaryValue(
+                    loadText = card.secondaryValue,
+                    card = card,
+                    textView = primary_value,
+                    typeField = TypeField.SECONDARY
                 )
             }
             findViewById<TextView>(R.id.auxiliary_label).apply {
@@ -104,7 +115,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.auxiliaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialog(card, InputType.TYPE_CLASS_TEXT, auxiliary_value)
+                showCreateCategoryDialogForPrimaryValue(
+                    loadText = card.auxiliaryValue,
+                    card = card,
+                    textView = auxiliary_value,
+                    typeField = TypeField.AUXILIARY
+                )
             }
             findViewById<ImageView>(R.id.thumbnail).apply {
                 setImageResource(R.drawable.profile)
@@ -119,15 +135,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 setImageResource(card.getLogoDrawable())
             }
             findViewById<ImageView>(R.id.img_qr_code).apply {
-                val manager = getSystemService(Context.WINDOW_SERVICE) as WindowManager?
-                val display = manager!!.defaultDisplay
-                val point = Point()
-                display.getSize(point)
-                val width = point.x
-                val height = point.y
-                var smallerDimension = if (width < height) width else height
-                smallerDimension = smallerDimension * 3 / 4
-                var qrCodeContent = ""
+                val smallerDimension = getSmallDimension()
 
                 when (card.getTypeId()) {
                     TypeCard.WHATSAPP -> {
@@ -167,21 +175,51 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                     }
                 }
 
-                val qrgEncoder =
-                    QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
-
-                try {
-                    // Getting QR-Code as Bitmap
-                    val bitmap = qrgEncoder.encodeAsBitmap()
-                    // Setting Bitmap to ImageView
-                    setImageBitmap(bitmap)
-                } catch (e: WriterException) {
-                    Log.v("CardViewHolder", e.toString())
-                }
+                updateQRCode(getQRCode(card = card), smallerDimension)
             }
         } else {
             toast("Houve um erro ao carregar seus dados")
             finish()
+        }
+    }
+
+    private fun getQRCode(card: Card): String {
+        return when (card.getTypeId()) {
+            TypeCard.YOUTUBE -> "https://www.youtube.com/user/${card.secondaryValue}/"
+            TypeCard.WHATSAPP -> "https://wa.me/${card.secondaryValue}?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
+            TypeCard.INSTAGRAM -> "https://www.instagram.com/${card.secondaryValue}/?hl=pt-br"
+            TypeCard.FACBOOK -> "https://www.facebook.com/${card.primaryValue}"
+            TypeCard.LINKEDIN -> "https://www.linkedin.com/in/${card.primaryValue}"
+            TypeCard.BUSSINES -> ""
+        }
+    }
+
+    private fun getSmallDimension(): Int {
+        val manager = getSystemService(Context.WINDOW_SERVICE) as WindowManager?
+        val display = manager!!.defaultDisplay
+        val point = Point()
+        display.getSize(point)
+        val width = point.x
+        val height = point.y
+        var smallerDimension = if (width < height) width else height
+        smallerDimension = smallerDimension * 3 / 4
+        return smallerDimension
+    }
+
+    private fun ImageView.updateQRCode(
+        qrCodeContent: String,
+        smallerDimension: Int
+    ) {
+        val qrgEncoder =
+            QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
+
+        try {
+            // Getting QR-Code as Bitmap
+            val bitmap = qrgEncoder.encodeAsBitmap()
+            // Setting Bitmap to ImageView
+            setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            Log.v("CardViewHolder", e.toString())
         }
     }
 
@@ -212,7 +250,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun showCreateCategoryDialog(card: Card, inputType: Int, textView: TextView) {
+    private fun showCreateCategoryDialogForPrimaryValue(
+        loadText: String,
+        card: Card,
+        textView: TextView,
+        typeField: TypeField
+    ) {
         val context = this
         val builder = AlertDialog.Builder(context)
 
@@ -220,7 +263,14 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         val view = layoutInflater.inflate(R.layout.dialog_new_category, null)
 
         val categoryEditText = view.findViewById(R.id.categoryEditText) as EditText
-        categoryEditText.inputType = inputType
+        categoryEditText.setText(loadText)
+        categoryEditText.inputType =
+            getInputType(typeCard = card.getTypeId(), typeField = typeField)
+
+        if (card.getTypeId() == TypeCard.WHATSAPP) {
+            categoryEditText.addTextChangedListener(MascaraNumericaTextWatcher("##-#########"))
+        }
+
         builder.setView(view)
 
         // set up the ok button
@@ -233,11 +283,28 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             }
 
             if (isValid) {
-                // do something
-                card.primaryValue = categoryEditText.text.toString()
-                textView.text = categoryEditText.text.toString()
-                dbHandler.updateCard(card)
 
+                when (typeField) {
+                    TypeField.PRIMARY -> {
+                        card.primaryValue = categoryEditText.text.toString()
+                        textView.text = categoryEditText.text.toString()
+                        dbHandler.updateCard(card)
+                    }
+                    TypeField.SECONDARY -> {
+                        card.secondaryValue = categoryEditText.text.toString()
+                        textView.text = categoryEditText.text.toString()
+                        dbHandler.updateCard(card)
+                    }
+                    TypeField.AUXILIARY -> {
+                        card.auxiliaryValue = categoryEditText.text.toString()
+                        textView.text = categoryEditText.text.toString()
+                        dbHandler.updateCard(card)
+                    }
+                }
+                img_qr_code.updateQRCode(
+                    qrCodeContent = getQRCode(card = card),
+                    smallerDimension = getSmallDimension()
+                )
             }
 
             if (isValid) {
@@ -250,6 +317,14 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         }
 
         builder.show()
+    }
+
+    private fun getInputType(typeCard: TypeCard, typeField: TypeField): Int {
+        return if (typeCard == TypeCard.WHATSAPP && typeField == TypeField.PRIMARY) {
+            InputType.TYPE_CLASS_TEXT
+        } else if (typeCard == TypeCard.WHATSAPP && typeField == TypeField.SECONDARY) {
+            InputType.TYPE_CLASS_NUMBER
+        } else InputType.TYPE_CLASS_TEXT
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -321,6 +396,10 @@ internal fun Activity.toast(message: CharSequence) {
     toast?.cancel()
     toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         .apply { show() }
+}
+
+enum class TypeField {
+    PRIMARY, SECONDARY, AUXILIARY
 }
 
 

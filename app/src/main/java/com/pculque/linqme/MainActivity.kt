@@ -20,7 +20,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
-import com.pculque.FileUtils
+import com.pculque.linqme.util.AppConstants
+import com.pculque.linqme.util.FileUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -140,13 +141,6 @@ class MainActivity : AppCompatActivity() {
             type
         )
         Log.i("Debug", "Setup Json card list ${cardList.size}")
-
-        cardList.map {
-            val id = dbHandler.addCard(it)
-            Log.e("Debug", "Insert Card id: $id")
-        }
-
-        Log.i("Debug", "Size " + dbHandler.size())
     }
 
 

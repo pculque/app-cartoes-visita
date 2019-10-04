@@ -55,6 +55,6 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ef_ic_camera_white" />
+            app:srcCompat="@drawable/ic_qrcode_scan_white_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.pculque
+package com.pculque.linqme.util
 
 import android.content.Context
 import java.io.IOException
