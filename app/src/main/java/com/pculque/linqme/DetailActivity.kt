@@ -36,7 +36,6 @@ import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.pculque.linqme.database.CardHelper
-import java.lang.ref.WeakReference
 import java.util.*
 
 
@@ -141,18 +140,15 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                     TypeCard.WHATSAPP -> {
                         qrCodeContent =
                             "https://wa.me/5511987854040?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
-                        primary_label.text = "Mobile"
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
                     }
                     TypeCard.INSTAGRAM -> {
-                        primary_label.text = "Follow"
                         qrCodeContent = "https://www.instagram.com/instagram/?hl=pt-br"
                         auxiliaryContainer.visibility = View.INVISIBLE
                     }
                     TypeCard.YOUTUBE -> {
                         qrCodeContent = "https://www.youtube.com/user/YouTube/"
-                        primary_label.text = "Canal"
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
 
@@ -274,7 +270,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         builder.setView(view)
 
         // set up the ok button
-        builder.setPositiveButton(android.R.string.ok) { dialog, p1 ->
+        builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
             val newCategory = categoryEditText.text
             var isValid = true
             if (newCategory.isBlank()) {
@@ -312,7 +308,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             }
         }
 
-        builder.setNegativeButton(android.R.string.cancel) { dialog, p1 ->
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
             dialog.cancel()
         }
 
