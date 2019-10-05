@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Point
 import android.text.InputType
 import android.util.Log
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.selector
 import com.esafirm.imagepicker.features.ReturnMode
 import android.graphics.Color
-import android.net.Uri
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -36,8 +37,12 @@ import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.pculque.linqme.database.CardHelper
+import com.pculque.linqme.util.EncodeUtils
 import java.util.*
 
+import id.zelory.compressor.Compressor
+
+import java.io.File
 
 class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     companion object {
@@ -49,7 +54,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         // Give your color picker dialog unique IDs if you have multiple dialogs.
         private const val DIALOG_ID = 0
         private var TAG = DetailActivity::class.java.simpleName
-        private var id: Int = 0
+        private var cardId: Int = 0
 
     }
 
@@ -64,12 +69,9 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        id = intent.getIntExtra("card_id", 0)
+        cardId = intent.getIntExtra("card_id", 0)
 
-        val card = dbHandler.getCard(id)
-
-
-        Log.e(TAG, " ${card?.id}")
+        val card = dbHandler.getCard(cardId)
 
         toolbar_detail.title = getString(R.string.app_name)
         toolbar_detail.setNavigationIcon(R.drawable.baseline_close_white_24)
@@ -77,32 +79,38 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
         if (card != null) {
 
+            if (card.image.isNotEmpty()) {
+                thumbnail.setImageBitmap(EncodeUtils.decodeFromBase64ToBitmap(card.image))
+            } else {
+                thumbnail.setImageResource(R.drawable.profile)
+            }
+
             findViewById<ConstraintLayout>(R.id.relative_layout).apply {
                 setBackgroundColor(Color.parseColor(card.backgroundColor))
             }
-            findViewById<TextView>(R.id.title_text_view).apply {
+            findViewById<TextView>(R.id.primaryValue).apply {
                 text = card.primaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
                 showCreateCategoryDialogForPrimaryValue(
                     loadText = card.primaryValue,
                     card = card,
-                    textView = title_text_view,
+                    textView = primaryValue,
                     typeField = TypeField.PRIMARY
                 )
             }
-            findViewById<TextView>(R.id.primary_label).apply {
+            findViewById<TextView>(R.id.secondaryLabel).apply {
                 text = card.secondaryLabel
                 setTextColor(Color.parseColor(card.labelColor))
             }
-            findViewById<TextView>(R.id.primary_value).apply {
+            findViewById<TextView>(R.id.secondaryValue).apply {
                 text = card.secondaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
                 showCreateCategoryDialogForPrimaryValue(
                     loadText = card.secondaryValue,
                     card = card,
-                    textView = primary_value,
+                    textView = secondaryValue,
                     typeField = TypeField.SECONDARY
                 )
             }
@@ -121,15 +129,14 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                     typeField = TypeField.AUXILIARY
                 )
             }
-            findViewById<ImageView>(R.id.thumbnail).apply {
-                setImageResource(R.drawable.profile)
-            }.setOnClickListener {
+
+            thumbnail.setOnClickListener {
                 val countries = listOf("Trocar foto", "Editar Foto")
-                selector("", countries) { _, position ->
-                    toast("So you're living in ${countries[position]}, right?")
+                selector("", countries) { _, _ ->
                     start()
                 }
             }
+
             findViewById<ImageView>(R.id.logo).apply {
                 setImageResource(card.getLogoDrawable())
             }
@@ -239,11 +246,37 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             images = ImagePicker.getImages(data) as ArrayList<Image>
 
             findViewById<ImageView>(R.id.thumbnail).apply {
-                setImageURI(Uri.parse(images.first().path))
+                val file = File(images.first().path)
+                val imageBitmap = customCompressImage(file)
+                //setImageURI(Uri.parse(images.first().path))
+                val string64 = EncodeUtils.convertToBase64(imageBitmap)
+                Log.e(TAG, "Id: $cardId")
+                val card = dbHandler.getCard(cardId)
+                if (card != null) {
+                    card.image = string64
+                    dbHandler.updateCard(card)
+                } else {
+                    toast("Houve um erro ao salvar imagem")
+                }
+                setImageBitmap(imageBitmap)
             }
             return
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun customCompressImage(imageFile: File): Bitmap {
+        return Compressor(this)
+            .setMaxWidth(512)
+            .setMaxHeight(512)
+            .setQuality(100)
+            .setCompressFormat(Bitmap.CompressFormat.JPEG)
+            .setDestinationDirectoryPath(
+                Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES
+                ).absolutePath
+            )
+            .compressToBitmap(imageFile)
     }
 
     private fun showCreateCategoryDialogForPrimaryValue(
@@ -263,7 +296,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         categoryEditText.inputType =
             getInputType(typeCard = card.getTypeId(), typeField = typeField)
 
-        if (card.getTypeId() == TypeCard.WHATSAPP) {
+        if (card.getTypeId() == TypeCard.WHATSAPP && typeField == TypeField.SECONDARY) {
             categoryEditText.addTextChangedListener(MascaraNumericaTextWatcher("##-#########"))
         }
 

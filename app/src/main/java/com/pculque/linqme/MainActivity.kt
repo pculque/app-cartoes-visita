@@ -2,6 +2,7 @@ package com.pculque.linqme
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -102,8 +103,6 @@ class MainActivity : AppCompatActivity() {
                     postValue(Color.parseColor(it.labelColor))
                 }, valueColor = MutableLiveData<Int>().apply {
                     postValue(Color.parseColor(it.valueColor))
-                }, thumbnail = MutableLiveData<Int>().apply {
-                    postValue(R.drawable.profile)
                 }, secondaryLabel = MutableLiveData<String>().apply {
                     postValue(it.secondaryLabel)
                 }, secondaryValue = MutableLiveData<String>().apply {
@@ -112,6 +111,8 @@ class MainActivity : AppCompatActivity() {
                     postValue(it.primaryValue)
                 }, auxiliaryLabel = MutableLiveData<String>().apply {
                     postValue(it.auxiliaryLabel)
+                }, bitmap = MutableLiveData<Bitmap>().apply {
+                    //postValue()
                 }, auxiliaryValue = MutableLiveData<String>().apply {
                     postValue(it.auxiliaryValue)
                 }, type = it.getTypeId()
@@ -141,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             type
         )
         Log.i("Debug", "Setup Json card list ${cardList.size}")
+        cardList.map { card -> dbHandler.addCard(card) }
     }
 
 

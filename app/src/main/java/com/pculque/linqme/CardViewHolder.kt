@@ -14,6 +14,8 @@ import android.content.Context.WINDOW_SERVICE
 import android.graphics.Point
 import android.view.View
 import android.view.WindowManager
+import com.pculque.linqme.database.CardHelper
+import com.pculque.linqme.util.EncodeUtils
 import kotlinx.android.synthetic.main.item_card.view.*
 
 class CardViewHolder private constructor(private val binding: ItemCardBinding) :
@@ -34,6 +36,9 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
         binding.cardView.setOnClickListener {
             onItemClickListener?.invoke(binding.cardView, cardViewModel)
         }
+        val dbHandler = CardHelper(context = binding.cardView.context)
+        val card = dbHandler.getCard(cardViewModel.id)
+
         val manager = binding.root.context.getSystemService(WINDOW_SERVICE) as WindowManager?
         val display = manager!!.defaultDisplay
         val point = Point()
@@ -43,52 +48,54 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
         var smallerDimension = if (width < height) width else height
         smallerDimension = smallerDimension * 3 / 4
         var qrCodeContent = ""
+
         when (cardViewModel.type) {
             TypeCard.YOUTUBE -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_youtube)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "Canal"
-                qrCodeContent = "https://www.youtube.com/channel/UCPl_3zCQnCB4Iv79UD_i-5A"
+                qrCodeContent = "https://www.youtube.com/channel/${card?.secondaryValue}"
             }
             TypeCard.WHATSAPP -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_whatsapp)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "MOBILE"
                 qrCodeContent =
-                    "https://wa.me/5511987854040?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
+                    "https://wa.me/${card?.secondaryValue}?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
             }
             TypeCard.FACBOOK -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_facebook)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.visibility = View.INVISIBLE
-                binding.cardView.primary_label.visibility = View.INVISIBLE
-                qrCodeContent = "https://www.facebook.com/handsmobile/"
+                binding.cardView.secondaryLabel.visibility = View.INVISIBLE
+                binding.cardView.secondaryLabel.visibility = View.INVISIBLE
+                qrCodeContent = "https://www.facebook.com/${card?.primaryValue}/"
             }
             TypeCard.BUSSINES -> {
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "MOBILE"
                 qrCodeContent = "https://www.instagram.com/daddyyankee/?hl=pt-br"
             }
             TypeCard.INSTAGRAM -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_instagram)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "FOLLOW"
-                qrCodeContent = "https://www.instagram.com/daddyyankee/?hl=pt-br"
+                qrCodeContent = "https://www.instagram.com/${card?.secondaryValue}/?hl=pt-br"
 
             }
             TypeCard.LINKEDIN -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_linkedin)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                binding.cardView.primary_label.text = "Seguir"
                 qrCodeContent = "https://www.linkedin.com/in/${cardViewModel.primaryValue}/"
 
             }
+        }
+
+        if (card != null && card.image.isNotEmpty()) {
+            binding.cardView.thumbnail.setImageBitmap(EncodeUtils.decodeFromBase64ToBitmap(card.image))
+        } else {
+            binding.cardView.thumbnail.setImageResource(R.drawable.profile)
         }
         val qrgEncoder = QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
 

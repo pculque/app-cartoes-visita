@@ -43,6 +43,9 @@ class Card {
     @SerializedName("auxiliaryValue")
     var auxiliaryValue: String = ""
 
+    @Expose
+    @SerializedName("image")
+    var image: String = ""
 
     constructor(id: Int, primaryValue: String) {
         this.id = id

@@ -18,6 +18,7 @@ class AppDBOpenHelper(
                 TABLE_NAME + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY," +
                 COLUMN_LOGO + " INTEGER," +
+                COLUMN_IMAGE_STRING + " TEXT," +
                 COLUMN_TYPE + " INTEGER," +
                 COLUMN_THUMBNAIL + " INTEGER," +
                 COLUMN_BACKGROUND_COLOR + " TEXT," +
@@ -43,6 +44,7 @@ class AppDBOpenHelper(
         const val TABLE_NAME = "card"
         const val COLUMN_ID = "_id"
         const val COLUMN_LOGO = "logo"
+        const val COLUMN_IMAGE_STRING = "image"
         const val COLUMN_TYPE = "type"
         const val COLUMN_THUMBNAIL = "thumbnail"
         const val COLUMN_BACKGROUND_COLOR = "backgroundColor"

@@ -16,6 +16,7 @@ class CardHelper(context: Context) {
         val values = ContentValues()
         values.put(AppDBOpenHelper.COLUMN_TYPE, card.type)
         values.put(AppDBOpenHelper.COLUMN_LOGO, card.logo)
+        values.put(AppDBOpenHelper.COLUMN_IMAGE_STRING, card.image)
         values.put(AppDBOpenHelper.COLUMN_THUMBNAIL, card.thumbnail)
         values.put(AppDBOpenHelper.COLUMN_BACKGROUND_COLOR, card.backgroundColor)
         values.put(AppDBOpenHelper.COLUMN_LABEL_COLOR, card.labelColor)
@@ -55,6 +56,7 @@ class CardHelper(context: Context) {
         )
         cv.put(AppDBOpenHelper.COLUMN_SECONDARY_VALUE, card.secondaryValue)
         cv.put(AppDBOpenHelper.COLUMN_AUXILIARY_VALUE, card.auxiliaryValue)
+        cv.put(AppDBOpenHelper.COLUMN_IMAGE_STRING, card.image)
         val db = dbHandler.writableDatabase
 
         db.update(AppDBOpenHelper.TABLE_NAME, cv, "${AppDBOpenHelper.COLUMN_ID}=" + card.id, null)
@@ -71,6 +73,8 @@ class CardHelper(context: Context) {
             card.id = cursor.getInt(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_ID))
             card.type = cursor.getInt(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_TYPE))
             card.logo = cursor.getInt(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_LOGO))
+            card.image =
+                cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_IMAGE_STRING))
             card.thumbnail =
                 cursor.getInt(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_THUMBNAIL))
             card.backgroundColor =
