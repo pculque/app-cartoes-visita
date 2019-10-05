@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.detail
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -36,6 +36,9 @@ import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
+import com.pculque.linqme.ui.home.Card
+import com.pculque.linqme.R
+import com.pculque.linqme.ui.home.TypeCard
 import com.pculque.linqme.database.CardHelper
 import com.pculque.linqme.util.EncodeUtils
 import java.util.*

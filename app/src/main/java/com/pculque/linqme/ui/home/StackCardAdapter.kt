@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
 
-class StackCardAdapter(context: Context) : ListAdapter<CardViewModel, CardViewHolder>(diffUtil) {
+class StackCardAdapter(context: Context) : ListAdapter<CardViewModel, CardViewHolder>(
+    diffUtil
+) {
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<CardViewModel>() {
             override fun areItemsTheSame(oldItem: CardViewModel, newItem: CardViewModel): Boolean =
@@ -26,7 +28,8 @@ class StackCardAdapter(context: Context) : ListAdapter<CardViewModel, CardViewHo
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CardViewHolder = CardViewHolder.create(inflater, parent, false)
+    ): CardViewHolder =
+        CardViewHolder.create(inflater, parent, false)
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) = holder.bind(getItem(position), onItemClickListener)
 }

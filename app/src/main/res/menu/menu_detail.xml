@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.pculque.linqme.MainActivity">
+      tools:context="com.pculque.linqme.ui.home.MainActivity">
     <item android:id="@+id/action_picker"
           android:title="@string/action_picker"
           android:icon="@drawable/baseline_palette_white_24"

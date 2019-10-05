@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
-import com.pculque.linqme.Card
+import com.pculque.linqme.ui.home.Card
 
 
 class CardHelper(context: Context) {

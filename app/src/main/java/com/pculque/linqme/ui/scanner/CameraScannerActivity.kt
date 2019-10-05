@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.scanner
 
 import android.Manifest
 import android.content.Intent
@@ -10,6 +10,7 @@ import com.budiyev.android.codescanner.CodeScanner
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import com.pculque.linqme.R
 
 
 class CameraScannerActivity : AppCompatActivity() {

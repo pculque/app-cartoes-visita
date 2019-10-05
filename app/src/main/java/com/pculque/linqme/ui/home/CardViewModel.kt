@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.home
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 
 data class CardViewModel(
     val logo: LiveData<Int>,
-     val backgroundColor: LiveData<Int>,
+    val backgroundColor: LiveData<Int>,
     val labelColor: LiveData<Int>,
     val valueColor: LiveData<Int>,
     val primaryValue: LiveData<String>,

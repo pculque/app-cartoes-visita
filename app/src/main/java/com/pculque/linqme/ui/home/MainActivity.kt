@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.home
 
 import android.content.Context
 import android.content.Intent
@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
+import com.pculque.linqme.*
+import com.pculque.linqme.ui.detail.DetailActivity
+import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
 
@@ -60,7 +63,8 @@ class MainActivity : AppCompatActivity() {
                 val id = cardViewModel.id
 
                 startActivityWithOptions(compat) {
-                    DetailActivity.createIntent(it).putExtra("card_id", id)
+                    DetailActivity.createIntent(it)
+                        .putExtra("card_id", id)
                 }
             }
             submitList(getCardViewModel())
@@ -95,31 +99,32 @@ class MainActivity : AppCompatActivity() {
     private fun getCardViewModel(): List<CardViewModel> {
         val list = mutableListOf<CardViewModel>()
         dbHandler.getAllCards().map {
-            list.add(CardViewModel(
-                backgroundColor = MutableLiveData<Int>().apply {
-                    postValue(Color.parseColor(it.backgroundColor))
-                },
-                labelColor = MutableLiveData<Int>().apply {
-                    postValue(Color.parseColor(it.labelColor))
-                }, valueColor = MutableLiveData<Int>().apply {
-                    postValue(Color.parseColor(it.valueColor))
-                }, secondaryLabel = MutableLiveData<String>().apply {
-                    postValue(it.secondaryLabel)
-                }, secondaryValue = MutableLiveData<String>().apply {
-                    postValue(it.secondaryValue)
-                }, primaryValue = MutableLiveData<String>().apply {
-                    postValue(it.primaryValue)
-                }, auxiliaryLabel = MutableLiveData<String>().apply {
-                    postValue(it.auxiliaryLabel)
-                }, bitmap = MutableLiveData<Bitmap>().apply {
-                    //postValue()
-                }, auxiliaryValue = MutableLiveData<String>().apply {
-                    postValue(it.auxiliaryValue)
-                }, type = it.getTypeId()
-                , logo = MutableLiveData<Int>().apply {
-                    postValue(it.getLogoDrawable())
-                }, id = it.id
-            )
+            list.add(
+                CardViewModel(
+                    backgroundColor = MutableLiveData<Int>().apply {
+                        postValue(Color.parseColor(it.backgroundColor))
+                    },
+                    labelColor = MutableLiveData<Int>().apply {
+                        postValue(Color.parseColor(it.labelColor))
+                    }, valueColor = MutableLiveData<Int>().apply {
+                        postValue(Color.parseColor(it.valueColor))
+                    }, secondaryLabel = MutableLiveData<String>().apply {
+                        postValue(it.secondaryLabel)
+                    }, secondaryValue = MutableLiveData<String>().apply {
+                        postValue(it.secondaryValue)
+                    }, primaryValue = MutableLiveData<String>().apply {
+                        postValue(it.primaryValue)
+                    }, auxiliaryLabel = MutableLiveData<String>().apply {
+                        postValue(it.auxiliaryLabel)
+                    }, bitmap = MutableLiveData<Bitmap>().apply {
+                        //postValue()
+                    }, auxiliaryValue = MutableLiveData<String>().apply {
+                        postValue(it.auxiliaryValue)
+                    }, type = it.getTypeId()
+                    , logo = MutableLiveData<Int>().apply {
+                        postValue(it.getLogoDrawable())
+                    }, id = it.id
+                )
             )
         }
         return list

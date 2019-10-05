@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.pculque.linqme.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import android.content.Context.WINDOW_SERVICE
 import android.graphics.Point
 import android.view.View
 import android.view.WindowManager
+import com.pculque.linqme.R
 import com.pculque.linqme.database.CardHelper
 import com.pculque.linqme.util.EncodeUtils
 import kotlinx.android.synthetic.main.item_card.view.*
@@ -25,7 +26,13 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
             inflater: LayoutInflater,
             parent: ViewGroup,
             attachToRoot: Boolean
-        ): CardViewHolder = CardViewHolder(ItemCardBinding.inflate(inflater, parent, attachToRoot))
+        ): CardViewHolder = CardViewHolder(
+            ItemCardBinding.inflate(
+                inflater,
+                parent,
+                attachToRoot
+            )
+        )
     }
 
     fun bind(
