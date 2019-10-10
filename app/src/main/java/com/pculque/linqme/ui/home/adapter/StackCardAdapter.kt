@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.home
+package com.pculque.linqme.ui.home.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

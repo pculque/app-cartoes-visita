@@ -36,9 +36,9 @@ import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import com.pculque.linqme.ui.home.Card
+import com.pculque.linqme.ui.home.adapter.Card
 import com.pculque.linqme.R
-import com.pculque.linqme.ui.home.TypeCard
+import com.pculque.linqme.ui.home.adapter.TypeCard
 import com.pculque.linqme.database.CardHelper
 import com.pculque.linqme.util.EncodeUtils
 import java.util.*
@@ -66,7 +66,6 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     private val dbHandler = CardHelper(this)
     private var isCustomCard = false
     private var images = ArrayList<Image>()
-    private var qrCodeContent = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,11 +75,10 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
         val card = dbHandler.getCard(cardId)
 
-        toolbar_detail.title = getString(R.string.app_name)
-        toolbar_detail.setNavigationIcon(R.drawable.baseline_close_white_24)
-        setSupportActionBar(toolbar_detail)
-
         if (card != null) {
+            toolbar_detail.title = getTitleByTypeCard(card = card)
+            toolbar_detail.setNavigationIcon(R.drawable.baseline_close_white_24)
+            setSupportActionBar(toolbar_detail)
 
             if (card.image.isNotEmpty()) {
                 thumbnail.setImageBitmap(EncodeUtils.decodeFromBase64ToBitmap(card.image))
@@ -148,36 +146,27 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
                 when (card.getTypeId()) {
                     TypeCard.WHATSAPP -> {
-                        qrCodeContent =
-                            "https://wa.me/5511987854040?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
                     }
                     TypeCard.INSTAGRAM -> {
-                        qrCodeContent = "https://www.instagram.com/instagram/?hl=pt-br"
                         auxiliaryContainer.visibility = View.INVISIBLE
                     }
                     TypeCard.YOUTUBE -> {
-                        qrCodeContent = "https://www.youtube.com/user/YouTube/"
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
 
                     }
                     TypeCard.BUSSINES -> {
-                        qrCodeContent = "https://www.instagram.com/daddyyankee/?hl=pt-br"
-
                     }
                     TypeCard.FACBOOK -> {
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
-                        qrCodeContent = "https://www.facebook.com/zuck"
                         primaryContainer.visibility = View.INVISIBLE
                     }
                     TypeCard.LINKEDIN -> {
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
-                        qrCodeContent = "https://www.linkedin.com/in/${card.primaryValue}"
-                        //primaryContainer.visibility = View.INVISIBLE
                     }
                 }
 
@@ -189,11 +178,28 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         }
     }
 
+    private fun getTitleByTypeCard(card: Card): String {
+        return when (card.getTypeId()) {
+            TypeCard.YOUTUBE -> "YouTube Card"
+            TypeCard.WHATSAPP -> "WhatsApp Card"
+            TypeCard.INSTAGRAM -> "Instagram Card"
+            TypeCard.FACBOOK -> "Facebook Card"
+            TypeCard.LINKEDIN -> "LinkedIn Card"
+            TypeCard.BUSSINES -> ""
+        }
+    }
+
     private fun getQRCode(card: Card): String {
         return when (card.getTypeId()) {
             TypeCard.YOUTUBE -> "https://www.youtube.com/user/${card.secondaryValue}/"
-            TypeCard.WHATSAPP -> "https://wa.me/${card.secondaryValue}?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
-            TypeCard.INSTAGRAM -> "https://www.instagram.com/${card.secondaryValue}/?hl=pt-br"
+            TypeCard.WHATSAPP -> "https://wa.me/55${card.secondaryValue.replace(
+                "-",
+                ""
+            ).replace(" ", "")}?text=${getString(R.string.text_whatsapp)}"
+            TypeCard.INSTAGRAM -> "https://www.instagram.com/${card.secondaryValue.replace(
+                "@",
+                ""
+            )}/?hl=pt-br"
             TypeCard.FACBOOK -> "https://www.facebook.com/${card.primaryValue}"
             TypeCard.LINKEDIN -> "https://www.linkedin.com/in/${card.primaryValue}"
             TypeCard.BUSSINES -> ""

@@ -1,7 +1,8 @@
-package com.pculque.linqme.ui.home
+package com.pculque.linqme.ui.home.adapter
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
+import com.pculque.linqme.ui.home.adapter.TypeCard
 
 
 data class CardViewModel(

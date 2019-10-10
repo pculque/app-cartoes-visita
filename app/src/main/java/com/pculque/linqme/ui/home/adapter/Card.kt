@@ -1,8 +1,9 @@
-package com.pculque.linqme.ui.home
+package com.pculque.linqme.ui.home.adapter
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.pculque.linqme.R
+import com.pculque.linqme.ui.home.adapter.TypeCard
 
 class Card {
     var id: Int = 0

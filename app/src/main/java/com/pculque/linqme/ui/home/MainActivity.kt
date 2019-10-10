@@ -23,6 +23,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
 import com.pculque.linqme.*
 import com.pculque.linqme.ui.detail.DetailActivity
+import com.pculque.linqme.ui.home.adapter.Card
+import com.pculque.linqme.ui.home.adapter.CardViewModel
+import com.pculque.linqme.ui.home.adapter.StackCardAdapter
 import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
@@ -146,7 +149,6 @@ class MainActivity : AppCompatActivity() {
             ),
             type
         )
-        Log.i("Debug", "Setup Json card list ${cardList.size}")
         cardList.map { card -> dbHandler.addCard(card) }
     }
 
@@ -158,14 +160,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val url = "Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
+        val url = getString(R.string.share_app)
 
         return when (item.itemId) {
             R.id.action_share -> {
                 val shareIntent = ShareCompat.IntentBuilder
                     .from(this)
                     .setType("text/plain")
-                    .setChooserTitle("LINQ.me")
+                    .setChooserTitle(getString(R.string.app_name))
                     .setText(url)
                     .intent
 

@@ -3,4 +3,7 @@
     <string name="action_shared">Shared</string>
     <string name="submit">Aceitar</string>
     <string name="action_picker">picker</string>
+    <string name="share_app">Baixe agora o seu piic.me: www.piicme.com</string>
+    <string name="text_whatsapp">Olá! Acabamos de nos conhecer através do piic.me. Baixe agora o seu: www.piic.me.</string>
+
 </resources>
