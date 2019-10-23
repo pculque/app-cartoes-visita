@@ -21,6 +21,7 @@ class CardHelper(context: Context) {
         values.put(AppDBOpenHelper.COLUMN_BACKGROUND_COLOR, card.backgroundColor)
         values.put(AppDBOpenHelper.COLUMN_LABEL_COLOR, card.labelColor)
         values.put(AppDBOpenHelper.COLUMN_VALUE_COLOR, card.valueColor)
+        values.put(AppDBOpenHelper.COLUMN_QR_CODE, card.qrCode)
         values.put(AppDBOpenHelper.COLUMN_PRIMARY_VALUE, card.primaryValue)
         values.put(AppDBOpenHelper.COLUMN_SECONDARY_LABEL, card.secondaryLabel)
         values.put(AppDBOpenHelper.COLUMN_SECONDARY_VALUE, card.secondaryValue)
@@ -54,9 +55,12 @@ class CardHelper(context: Context) {
             AppDBOpenHelper.COLUMN_PRIMARY_VALUE,
             card.primaryValue
         )
+        cv.put(AppDBOpenHelper.COLUMN_SECONDARY_LABEL, card.secondaryLabel)
         cv.put(AppDBOpenHelper.COLUMN_SECONDARY_VALUE, card.secondaryValue)
         cv.put(AppDBOpenHelper.COLUMN_AUXILIARY_VALUE, card.auxiliaryValue)
         cv.put(AppDBOpenHelper.COLUMN_IMAGE_STRING, card.image)
+        cv.put(AppDBOpenHelper.COLUMN_QR_CODE, card.qrCode)
+
         val db = dbHandler.writableDatabase
 
         db.update(AppDBOpenHelper.TABLE_NAME, cv, "${AppDBOpenHelper.COLUMN_ID}=" + card.id, null)
@@ -85,6 +89,8 @@ class CardHelper(context: Context) {
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_VALUE_COLOR))
             card.primaryValue =
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_PRIMARY_VALUE))
+            card.qrCode =
+                cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_QR_CODE))
             card.secondaryLabel =
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_SECONDARY_LABEL))
             card.secondaryValue =
@@ -123,6 +129,8 @@ class CardHelper(context: Context) {
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_LABEL_COLOR))
             card.valueColor =
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_VALUE_COLOR))
+            card.qrCode =
+                cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_QR_CODE))
             card.primaryValue =
                 cursor.getString(cursor.getColumnIndexOrThrow(AppDBOpenHelper.COLUMN_PRIMARY_VALUE))
             card.secondaryLabel =

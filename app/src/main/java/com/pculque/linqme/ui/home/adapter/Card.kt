@@ -3,7 +3,6 @@ package com.pculque.linqme.ui.home.adapter
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.pculque.linqme.R
-import com.pculque.linqme.ui.home.adapter.TypeCard
 
 class Card {
     var id: Int = 0
@@ -49,40 +48,7 @@ class Card {
     @SerializedName("image")
     var image: String = ""
 
-    constructor(id: Int, primaryValue: String) {
-        this.id = id
-        this.primaryValue = primaryValue
-    }
-
-    constructor(primaryValue: String) {
-        this.primaryValue = primaryValue
-    }
-
-    constructor(
-        logo: Int,
-        thumbnail: Int,
-        backgroundColor: String,
-        labelColor: String,
-        valueColor: String,
-        primaryValue: String,
-        secondaryLabel: String,
-        secondaryValue: String,
-        auxiliaryLabel: String,
-        auxiliaryValue: String
-    ) {
-        this.logo = logo
-        this.thumbnail = thumbnail
-        this.backgroundColor = backgroundColor
-        this.labelColor = labelColor
-        this.valueColor = valueColor
-        this.primaryValue = primaryValue
-        this.secondaryLabel = secondaryLabel
-        this.secondaryValue = secondaryValue
-        this.auxiliaryLabel = auxiliaryLabel
-        this.auxiliaryValue = auxiliaryValue
-    }
-
-    constructor()
+    var qrCode: String = ""
 
     fun getTypeId(): TypeCard {
         return when (this.type) {

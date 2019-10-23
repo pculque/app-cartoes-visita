@@ -22,6 +22,7 @@ class AppDBOpenHelper(
                 COLUMN_TYPE + " INTEGER," +
                 COLUMN_THUMBNAIL + " INTEGER," +
                 COLUMN_BACKGROUND_COLOR + " TEXT," +
+                COLUMN_QR_CODE + " TEXT," +
                 COLUMN_LABEL_COLOR + " TEXT," +
                 COLUMN_VALUE_COLOR + " TEXT," +
                 COLUMN_PRIMARY_VALUE + " TEXT," +
@@ -44,6 +45,7 @@ class AppDBOpenHelper(
         const val TABLE_NAME = "card"
         const val COLUMN_ID = "_id"
         const val COLUMN_LOGO = "logo"
+        const val COLUMN_QR_CODE = "qrcode"
         const val COLUMN_IMAGE_STRING = "image"
         const val COLUMN_TYPE = "type"
         const val COLUMN_THUMBNAIL = "thumbnail"

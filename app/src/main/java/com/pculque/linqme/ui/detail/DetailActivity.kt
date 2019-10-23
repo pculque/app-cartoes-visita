@@ -93,7 +93,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.primaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialogForPrimaryValue(
+                showDialog(
                     loadText = card.primaryValue,
                     card = card,
                     textView = primaryValue,
@@ -104,11 +104,32 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.secondaryLabel
                 setTextColor(Color.parseColor(card.labelColor))
             }
+            if (card.getTypeId() == TypeCard.FACBOOK) {
+                button_edit_qr.visibility = View.VISIBLE
+            }
+            button_edit_qr.setOnClickListener {
+                showDialog(
+                    loadText = getQRCode(card),
+                    card = card,
+                    typeField = TypeField.QR_CODE,
+                    textView = null
+                )
+            }
+            secondaryLabel.setOnClickListener {
+                if (card.getTypeId() == TypeCard.LINKEDIN) {
+                    showDialog(
+                        loadText = card.secondaryLabel,
+                        card = card,
+                        textView = secondaryLabel,
+                        typeField = TypeField.SECONDARY_LABEL
+                    )
+                }
+            }
             findViewById<TextView>(R.id.secondaryValue).apply {
                 text = card.secondaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialogForPrimaryValue(
+                showDialog(
                     loadText = card.secondaryValue,
                     card = card,
                     textView = secondaryValue,
@@ -123,7 +144,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.auxiliaryValue
                 setTextColor(Color.parseColor(card.valueColor))
             }.setOnClickListener {
-                showCreateCategoryDialogForPrimaryValue(
+                showDialog(
                     loadText = card.auxiliaryValue,
                     card = card,
                     textView = auxiliary_value,
@@ -169,8 +190,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                         auxiliary_value.visibility = View.INVISIBLE
                     }
                 }
+                if (card.getTypeId() == TypeCard.FACBOOK) {
+                    updateQRCode(card = card, smallerDimension = smallerDimension)
+                } else {
+                    updateQRCode(card = card, smallerDimension = smallerDimension)
+                }
 
-                updateQRCode(getQRCode(card = card), smallerDimension)
             }
         } else {
             toast("Houve um erro ao carregar seus dados")
@@ -219,9 +244,16 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     }
 
     private fun ImageView.updateQRCode(
-        qrCodeContent: String,
+        card: Card,
         smallerDimension: Int
     ) {
+        val qrCodeContent: String
+
+        if (card.getTypeId() == TypeCard.FACBOOK) {
+            qrCodeContent = "https://www.facebook.com/seu-nome-aqui"
+        } else {
+            qrCodeContent = getQRCode(card)
+        }
         val qrgEncoder =
             QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
 
@@ -288,10 +320,10 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             .compressToBitmap(imageFile)
     }
 
-    private fun showCreateCategoryDialogForPrimaryValue(
+    private fun showDialog(
         loadText: String,
         card: Card,
-        textView: TextView,
+        textView: TextView?,
         typeField: TypeField
     ) {
         val context = this
@@ -325,22 +357,30 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 when (typeField) {
                     TypeField.PRIMARY -> {
                         card.primaryValue = categoryEditText.text.toString()
-                        textView.text = categoryEditText.text.toString()
+                        textView?.text = categoryEditText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.SECONDARY -> {
                         card.secondaryValue = categoryEditText.text.toString()
-                        textView.text = categoryEditText.text.toString()
+                        textView?.text = categoryEditText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.AUXILIARY -> {
                         card.auxiliaryValue = categoryEditText.text.toString()
-                        textView.text = categoryEditText.text.toString()
+                        textView?.text = categoryEditText.text.toString()
                         dbHandler.updateCard(card)
+                    }
+                    TypeField.SECONDARY_LABEL -> {
+                        card.secondaryLabel = categoryEditText.text.toString()
+                        textView?.text = categoryEditText.text.toString()
+                        dbHandler.updateCard(card)
+                    }
+                    TypeField.QR_CODE -> {
+                        getQRCode(card)
                     }
                 }
                 img_qr_code.updateQRCode(
-                    qrCodeContent = getQRCode(card = card),
+                    card = card,
                     smallerDimension = getSmallDimension()
                 )
             }
@@ -437,7 +477,7 @@ internal fun Activity.toast(message: CharSequence) {
 }
 
 enum class TypeField {
-    PRIMARY, SECONDARY, AUXILIARY
+    PRIMARY, SECONDARY, SECONDARY_LABEL, AUXILIARY, QR_CODE
 }
 
 
