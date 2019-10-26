@@ -95,8 +95,8 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
                 binding.cardView.logo.setImageResource(R.drawable.logo_linkedin)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                qrCodeContent = "https://www.linkedin.com/in/${cardViewModel.primaryValue}/"
-
+                //qrCodeContent = "https://www.linkedin.com/in/${cardViewModel.primaryValue}/"
+                qrCodeContent = card?.qrCode ?: ""
             }
         }
 

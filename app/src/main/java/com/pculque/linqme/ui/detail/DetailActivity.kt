@@ -104,15 +104,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.secondaryLabel
                 setTextColor(Color.parseColor(card.labelColor))
             }
-            if (card.getTypeId() == TypeCard.FACBOOK) {
+            if (card.getTypeId() == TypeCard.FACBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
                 button_edit_qr.visibility = View.VISIBLE
             }
             button_edit_qr.setOnClickListener {
-                showDialog(
-                    loadText = getQRCode(card),
-                    card = card,
-                    typeField = TypeField.QR_CODE,
-                    textView = null
+                showDialogCustomQR(
+                    card = card
                 )
             }
             secondaryLabel.setOnClickListener {
@@ -190,11 +187,8 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                         auxiliary_value.visibility = View.INVISIBLE
                     }
                 }
-                if (card.getTypeId() == TypeCard.FACBOOK) {
-                    updateQRCode(card = card, smallerDimension = smallerDimension)
-                } else {
-                    updateQRCode(card = card, smallerDimension = smallerDimension)
-                }
+
+                updateQRCode(card = card, smallerDimension = smallerDimension)
 
             }
         } else {
@@ -217,6 +211,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     private fun getQRCode(card: Card): String {
         return when (card.getTypeId()) {
             TypeCard.YOUTUBE -> "https://www.youtube.com/user/${card.secondaryValue}/"
+            //TypeCard.YOUTUBE -> card.qrCode
             TypeCard.WHATSAPP -> "https://wa.me/55${card.secondaryValue.replace(
                 "-",
                 ""
@@ -225,8 +220,9 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 "@",
                 ""
             )}/?hl=pt-br"
-            TypeCard.FACBOOK -> "https://www.facebook.com/${card.primaryValue}"
-            TypeCard.LINKEDIN -> "https://www.linkedin.com/in/${card.primaryValue}"
+            TypeCard.FACBOOK -> card.qrCode
+            //TypeCard.LINKEDIN -> "https://www.linkedin.com/in/${card.primaryValue}"
+            TypeCard.LINKEDIN -> "card.qrCode"
             TypeCard.BUSSINES -> ""
         }
     }
@@ -247,13 +243,13 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         card: Card,
         smallerDimension: Int
     ) {
-        val qrCodeContent: String
+        val qrCodeContent: String =
+            if (card.getTypeId() == TypeCard.FACBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
+                card.qrCode
+            } else {
+                getQRCode(card)
+            }
 
-        if (card.getTypeId() == TypeCard.FACBOOK) {
-            qrCodeContent = "https://www.facebook.com/seu-nome-aqui"
-        } else {
-            qrCodeContent = getQRCode(card)
-        }
         val qrgEncoder =
             QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
 
@@ -320,6 +316,53 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             .compressToBitmap(imageFile)
     }
 
+    private fun showDialogCustomQR(
+        card: Card
+    ) {
+
+        val context = this
+        val builder = AlertDialog.Builder(context)
+
+        // Seems ok to inflate view with null rootView
+        val view = layoutInflater.inflate(R.layout.dialog_new_category, null)
+
+        val inputText = view.findViewById(R.id.input_text) as EditText
+        inputText.setText(card.qrCode)
+        inputText.inputType =
+            InputType.TYPE_CLASS_TEXT
+
+        builder.setView(view)
+
+        // set up the ok button
+        builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
+            val newCategory = inputText.text
+            var isValid = true
+            if (newCategory.isBlank()) {
+                inputText.error = getString(R.string.app_name)
+                isValid = false
+            }
+
+            if (isValid) {
+                card.qrCode = inputText.text.toString()
+                dbHandler.updateCard(card)
+                img_qr_code.updateQRCode(
+                    card = card,
+                    smallerDimension = getSmallDimension()
+                )
+            }
+
+            if (isValid) {
+                dialog.dismiss()
+            }
+        }
+
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
+    }
+
     private fun showDialog(
         loadText: String,
         card: Card,
@@ -332,23 +375,23 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         // Seems ok to inflate view with null rootView
         val view = layoutInflater.inflate(R.layout.dialog_new_category, null)
 
-        val categoryEditText = view.findViewById(R.id.categoryEditText) as EditText
-        categoryEditText.setText(loadText)
-        categoryEditText.inputType =
+        val inputValueText = view.findViewById(R.id.input_text) as EditText
+        inputValueText.setText(loadText)
+        inputValueText.inputType =
             getInputType(typeCard = card.getTypeId(), typeField = typeField)
 
         if (card.getTypeId() == TypeCard.WHATSAPP && typeField == TypeField.SECONDARY) {
-            categoryEditText.addTextChangedListener(MascaraNumericaTextWatcher("##-#########"))
+            inputValueText.addTextChangedListener(MascaraNumericaTextWatcher("##-#########"))
         }
 
         builder.setView(view)
 
         // set up the ok button
         builder.setPositiveButton(android.R.string.ok) { dialog, _ ->
-            val newCategory = categoryEditText.text
+            val newCategory = inputValueText.text
             var isValid = true
             if (newCategory.isBlank()) {
-                categoryEditText.error = getString(R.string.app_name)
+                inputValueText.error = getString(R.string.app_name)
                 isValid = false
             }
 
@@ -356,23 +399,23 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
                 when (typeField) {
                     TypeField.PRIMARY -> {
-                        card.primaryValue = categoryEditText.text.toString()
-                        textView?.text = categoryEditText.text.toString()
+                        card.primaryValue = inputValueText.text.toString()
+                        textView?.text = inputValueText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.SECONDARY -> {
-                        card.secondaryValue = categoryEditText.text.toString()
-                        textView?.text = categoryEditText.text.toString()
+                        card.secondaryValue = inputValueText.text.toString()
+                        textView?.text = inputValueText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.AUXILIARY -> {
-                        card.auxiliaryValue = categoryEditText.text.toString()
-                        textView?.text = categoryEditText.text.toString()
+                        card.auxiliaryValue = inputValueText.text.toString()
+                        textView?.text = inputValueText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.SECONDARY_LABEL -> {
-                        card.secondaryLabel = categoryEditText.text.toString()
-                        textView?.text = categoryEditText.text.toString()
+                        card.secondaryLabel = inputValueText.text.toString()
+                        textView?.text = inputValueText.text.toString()
                         dbHandler.updateCard(card)
                     }
                     TypeField.QR_CODE -> {

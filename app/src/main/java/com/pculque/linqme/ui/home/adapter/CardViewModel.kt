@@ -16,7 +16,6 @@ data class CardViewModel(
     val auxiliaryLabel: LiveData<String>,
     val auxiliaryValue: LiveData<String>,
     val bitmap: LiveData<Bitmap>,
-
     val type: TypeCard,
     val id: Int
 )

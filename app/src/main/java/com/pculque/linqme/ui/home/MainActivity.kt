@@ -39,6 +39,14 @@ class MainActivity : AppCompatActivity() {
     private val dbHandler = CardHelper(this)
     lateinit var adapter: StackCardAdapter
 
+    private fun startDetail(cardViewModel: CardViewModel) {
+        val intent = Intent(this, DetailActivity::class.java)
+        val id = cardViewModel.id
+
+        intent.putExtra("card_id", id)
+        startActivity(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -58,17 +66,18 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         adapter.apply {
             onItemClickListener = { cardView, cardViewModel ->
-                val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    this@MainActivity,
-                    cardView,
-                    cardView.transitionName
-                )
-                val id = cardViewModel.id
+                /* val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                     this@MainActivity,
+                     cardView,
+                     cardView.transitionName
+                 )
+                 val id = cardViewModel.id
 
-                startActivityWithOptions(compat) {
-                    DetailActivity.createIntent(it)
-                        .putExtra("card_id", id)
-                }
+                 startActivityWithOptions(compat) {
+                     DetailActivity.createIntent(it)
+                         .putExtra("card_id", id)
+                 }*/
+                startDetail(cardViewModel = cardViewModel)
             }
             submitList(getCardViewModel())
         }
@@ -95,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.apply {
-            submitList(getCardViewModel())
+           // submitList(getCardViewModel())
         }
     }
 

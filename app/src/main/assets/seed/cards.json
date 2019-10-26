@@ -10,7 +10,8 @@
     "secondaryLabel": "Canal",
     "secondaryValue": "Id do seu Canal",
     "auxiliaryLabel": "",
-    "auxiliaryValue": ""
+    "auxiliaryValue": "",
+    "qr_code": "https://www.youtube.com/user/url-do-seu-canal-aqui"
   },
   {
     "type": 2,
@@ -23,7 +24,8 @@
     "secondaryLabel": "",
     "secondaryValue": "",
     "auxiliaryLabel": "",
-    "auxiliaryValue": ""
+    "auxiliaryValue": "",
+    "qr_code": "https://www.facebook.com/seu-nome-aqui"
   },
   {
     "type": 3,
@@ -62,6 +64,7 @@
     "secondaryLabel": "Empresa",
     "secondaryValue": "Cargo ",
     "auxiliaryLabel": "",
-    "auxiliaryValue": ""
+    "auxiliaryValue": "",
+    "qr_code": "https://www.linkedin.com/in/complete-sua-url"
   }
 ]

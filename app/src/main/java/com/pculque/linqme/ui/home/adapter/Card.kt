@@ -48,6 +48,8 @@ class Card {
     @SerializedName("image")
     var image: String = ""
 
+    @Expose
+    @SerializedName("qr_code")
     var qrCode: String = ""
 
     fun getTypeId(): TypeCard {
