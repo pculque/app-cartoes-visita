@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import com.pculque.linqme.R
+import android.content.ActivityNotFoundException
 
 
 class CameraScannerActivity : AppCompatActivity() {
@@ -41,9 +42,17 @@ class CameraScannerActivity : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                val message = it.text
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message))
-                startActivity(intent)
+
+                try {
+                    // Your startActivity code wich throws exception
+                } catch (activityNotFound: ActivityNotFoundException) {
+
+                    // Now, You can catch the exception here and do what you want
+                    val message = it.text
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message))
+                    startActivity(intent)
+                }
+
             }
         }
         codeScanner.errorCallback = ErrorCallback {

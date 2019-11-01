@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, CameraScannerActivity::class.java))
         }
 
-        dbHandler.clear()
+        //dbHandler.clear()
         setupCards()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.apply {
-           // submitList(getCardViewModel())
+            // submitList(getCardViewModel())
         }
     }
 
