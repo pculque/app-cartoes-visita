@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.budiyev.android.codescanner.*
 import com.budiyev.android.codescanner.CodeScanner
 import android.content.pm.PackageManager
@@ -43,9 +42,7 @@ class CameraScannerActivity : AppCompatActivity() {
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
                 val message = it.text
-                Toast.makeText(this, "Scan result: $message", Toast.LENGTH_LONG).show()
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message))
-                startActivity(intent)
                 startActivity(intent)
             }
         }

@@ -9,7 +9,7 @@ class CustomApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (!BuildConfig.DEBUG)
-            Fabric.with(this, Crashlytics())
+        //if (!BuildConfig.DEBUG)
+        //  Fabric.with(this, Crashlytics())
     }
 }
