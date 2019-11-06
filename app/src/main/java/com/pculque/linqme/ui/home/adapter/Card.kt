@@ -55,7 +55,7 @@ class Card {
     fun getTypeId(): TypeCard {
         return when (this.type) {
             1 -> TypeCard.YOUTUBE
-            2 -> TypeCard.FACBOOK
+            2 -> TypeCard.FACEBOOK
             3 -> TypeCard.INSTAGRAM
             4 -> TypeCard.WHATSAPP
             5 -> TypeCard.LINKEDIN

@@ -66,6 +66,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     private val dbHandler = CardHelper(this)
     private var isCustomCard = false
     private var images = ArrayList<Image>()
+    private var startActivity: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,12 +105,15 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 text = card.secondaryLabel
                 setTextColor(Color.parseColor(card.labelColor))
             }
-            if (card.getTypeId() == TypeCard.FACBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
+            if (card.getTypeId() == TypeCard.FACEBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
                 button_edit_qr.visibility = View.VISIBLE
+            } else {
+                button_edit_qr.visibility = View.GONE
             }
             button_edit_qr.setOnClickListener {
                 showDialogCustomQR(
-                    card = card
+                    card = card,
+                    typeField = TypeField.QR_CODE
                 )
             }
             secondaryLabel.setOnClickListener {
@@ -156,6 +160,27 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 }
             }
 
+            if ((card.getTypeId() == TypeCard.YOUTUBE
+                        || card.getTypeId() == TypeCard.FACEBOOK
+                        || card.getTypeId() == TypeCard.INSTAGRAM
+                        || card.getTypeId() == TypeCard.WHATSAPP
+                        || card.getTypeId() == TypeCard.LINKEDIN) == card.primaryValue.isEmpty()
+            ) {
+                primaryValue.text = "Digite o seu Nome"
+            }
+            if (card.getTypeId() == TypeCard.YOUTUBE && card.secondaryValue.isEmpty()) {
+                secondaryValue.text = "Digite o ID do seu canal"
+            }
+            if (card.getTypeId() == TypeCard.INSTAGRAM && card.secondaryValue.isEmpty()) {
+                secondaryValue.text = "Digite o ID da sua conta (@meu_id)"
+            }
+            if (card.getTypeId() == TypeCard.WHATSAPP && card.secondaryValue.isEmpty()) {
+                secondaryValue.text = "Digite o seu número"
+            }
+            if (card.getTypeId() == TypeCard.LINKEDIN && card.secondaryValue.isEmpty()) {
+                secondaryValue.text = "Digite o seu cargo"
+            }
+
             findViewById<ImageView>(R.id.logo).apply {
                 setImageResource(card.getLogoDrawable())
             }
@@ -177,7 +202,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                     }
                     TypeCard.BUSSINES -> {
                     }
-                    TypeCard.FACBOOK -> {
+                    TypeCard.FACEBOOK -> {
                         auxiliary_label.visibility = View.INVISIBLE
                         auxiliary_value.visibility = View.INVISIBLE
                         primaryContainer.visibility = View.INVISIBLE
@@ -187,14 +212,28 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                         auxiliary_value.visibility = View.INVISIBLE
                     }
                 }
+                img_qr_code.setOnClickListener {
+                    showDialogCustomQR(
+                        card = card, typeField = TypeField.QR_CODE
+                    )
+                }
 
-                updateQRCode(card = card, smallerDimension = smallerDimension)
+                if ((card.getTypeId() == TypeCard.FACEBOOK || card.getTypeId() == TypeCard.LINKEDIN) && card.qrCode.isEmpty()) {
+
+                } else {
+                    updateQRCode(
+                        card = card,
+                        smallerDimension = smallerDimension,
+                        typeField = TypeField.PRIMARY
+                    )
+                }
 
             }
         } else {
             toast("Houve um erro ao carregar seus dados")
             finish()
         }
+        startActivity = false
     }
 
     private fun getTitleByTypeCard(card: Card): String {
@@ -202,7 +241,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             TypeCard.YOUTUBE -> "YouTube Card"
             TypeCard.WHATSAPP -> "WhatsApp Card"
             TypeCard.INSTAGRAM -> "Instagram Card"
-            TypeCard.FACBOOK -> "Facebook Card"
+            TypeCard.FACEBOOK -> "Facebook Card"
             TypeCard.LINKEDIN -> "LinkedIn Card"
             TypeCard.BUSSINES -> ""
         }
@@ -210,19 +249,21 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
     private fun getQRCode(card: Card): String {
         return when (card.getTypeId()) {
-            TypeCard.YOUTUBE -> "https://www.youtube.com/user/${card.secondaryValue}/"
+            TypeCard.YOUTUBE -> "https://www.youtube.com/${card.secondaryValue}/"
             //TypeCard.YOUTUBE -> card.qrCode
-            TypeCard.WHATSAPP -> "https://wa.me/55${card.secondaryValue.replace(
-                "-",
-                ""
-            ).replace(" ", "")}?text=${getString(R.string.text_whatsapp)}"
+            TypeCard.WHATSAPP -> "https://wa.me/55${card.secondaryValue
+                .replace(
+                    "(", ""
+                ).replace(")", "")
+                .replace(" ", "")
+                .replace("-", "")}?text=${getString(R.string.text_whatsapp)}"
             TypeCard.INSTAGRAM -> "https://www.instagram.com/${card.secondaryValue.replace(
                 "@",
                 ""
             )}/?hl=pt-br"
-            TypeCard.FACBOOK -> card.qrCode
+            TypeCard.FACEBOOK -> card.qrCode
             //TypeCard.LINKEDIN -> "https://www.linkedin.com/in/${card.primaryValue}"
-            TypeCard.LINKEDIN -> "card.qrCode"
+            TypeCard.LINKEDIN -> card.qrCode
             TypeCard.BUSSINES -> ""
         }
     }
@@ -241,14 +282,20 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
 
     private fun ImageView.updateQRCode(
         card: Card,
-        smallerDimension: Int
+        smallerDimension: Int, typeField: TypeField
+
     ) {
-        val qrCodeContent: String =
-            if (card.getTypeId() == TypeCard.FACBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
-                card.qrCode
-            } else {
-                getQRCode(card)
-            }
+        val qrCodeContent: String
+
+        if ((card.getTypeId() == TypeCard.FACEBOOK || card.getTypeId() == TypeCard.LINKEDIN) && card.qrCode.isNotEmpty()) {
+            button_edit_qr.visibility = View.GONE
+            qrCodeContent = card.qrCode
+        } else {
+            qrCodeContent = getQRCode(card)
+        }
+
+        if (!startActivity && typeField == TypeField.QR_CODE)
+            toast(qrCodeContent)
 
         val qrgEncoder =
             QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
@@ -317,7 +364,8 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
     }
 
     private fun showDialogCustomQR(
-        card: Card
+        card: Card,
+        typeField: TypeField
     ) {
 
         val context = this
@@ -327,7 +375,14 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         val view = layoutInflater.inflate(R.layout.dialog_new_category, null)
 
         val inputText = view.findViewById(R.id.input_text) as EditText
-        inputText.setText(card.qrCode)
+
+        if (card.getTypeId() == TypeCard.FACEBOOK || card.getTypeId() == TypeCard.LINKEDIN) {
+            inputText.hint = "Cole a URL do seu perfil aqui..."
+        }
+        if (card.qrCode.isNotEmpty()) {
+            inputText.setText(card.qrCode)
+        }
+
         inputText.inputType =
             InputType.TYPE_CLASS_TEXT
 
@@ -347,7 +402,8 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 dbHandler.updateCard(card)
                 img_qr_code.updateQRCode(
                     card = card,
-                    smallerDimension = getSmallDimension()
+                    smallerDimension = getSmallDimension(),
+                    typeField = typeField
                 )
             }
 
@@ -376,12 +432,29 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
         val view = layoutInflater.inflate(R.layout.dialog_new_category, null)
 
         val inputValueText = view.findViewById(R.id.input_text) as EditText
-        inputValueText.setText(loadText)
+
         inputValueText.inputType =
             getInputType(typeCard = card.getTypeId(), typeField = typeField)
 
+
+        if ((card.getTypeId() == TypeCard.YOUTUBE || card.getTypeId() == TypeCard.FACEBOOK || card.getTypeId() == TypeCard.LINKEDIN || card.getTypeId() == TypeCard.INSTAGRAM || card.getTypeId() == TypeCard.LINKEDIN) && typeField == TypeField.PRIMARY && card.primaryValue.isEmpty()) {
+            inputValueText.hint = "Digite o seu Nome..."
+        } else if (card.getTypeId() == TypeCard.YOUTUBE && typeField == TypeField.SECONDARY && card.secondaryValue.isEmpty()) {
+            inputValueText.hint = "Digite o ID do seu canal..."
+        } else if (card.getTypeId() == TypeCard.INSTAGRAM && typeField == TypeField.SECONDARY && card.secondaryValue.isEmpty()) {
+            inputValueText.hint = "Digite o ID da sua conta (@meu_id)..."
+        } else if (card.getTypeId() == TypeCard.WHATSAPP && typeField == TypeField.SECONDARY && card.secondaryValue.isEmpty()) {
+            inputValueText.hint = "Digite o seu número..."
+        } else if (card.getTypeId() == TypeCard.LINKEDIN && typeField == TypeField.SECONDARY && card.secondaryValue.isEmpty()) {
+            inputValueText.hint = "Digite o seu cargo..."
+        } else if (card.getTypeId() == TypeCard.LINKEDIN && typeField == TypeField.SECONDARY_LABEL) {
+            inputValueText.hint = "Digite o nome da sua empresa..."
+        } else {
+            inputValueText.setText(loadText)
+        }
+
         if (card.getTypeId() == TypeCard.WHATSAPP && typeField == TypeField.SECONDARY) {
-            inputValueText.addTextChangedListener(MascaraNumericaTextWatcher("##-#########"))
+            inputValueText.addTextChangedListener(MascaraNumericaTextWatcher("(##) #####-####"))
         }
 
         builder.setView(view)
@@ -422,10 +495,12 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                         getQRCode(card)
                     }
                 }
-                img_qr_code.updateQRCode(
-                    card = card,
-                    smallerDimension = getSmallDimension()
-                )
+                if (card.getTypeId() != TypeCard.FACEBOOK && card.getTypeId() != TypeCard.LINKEDIN) {
+                    img_qr_code.updateQRCode(
+                        card = card,
+                        smallerDimension = getSmallDimension(), typeField = typeField
+                    )
+                }
             }
 
             if (isValid) {

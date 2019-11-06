@@ -57,21 +57,22 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
         smallerDimension = smallerDimension * 3 / 4
         var qrCodeContent = ""
 
+
         when (cardViewModel.type) {
             TypeCard.YOUTUBE -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_youtube)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
-                qrCodeContent = "https://www.youtube.com/channel/${card?.secondaryValue}"
+                qrCodeContent = "https://www.youtube.com/${card?.secondaryValue}"
             }
             TypeCard.WHATSAPP -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_whatsapp)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
                 qrCodeContent =
-                    "https://wa.me/${card?.secondaryValue}?text=Olá! Acabamos de nos conhecer através do LINQ.me. Baixe agora o seu."
+                    "https://wa.me/${card?.secondaryValue}?text=Olá! Acabamos de nos conhecer através do piic.me. Baixe agora o seu."
             }
-            TypeCard.FACBOOK -> {
+            TypeCard.FACEBOOK -> {
                 binding.cardView.logo.setImageResource(R.drawable.logo_facebook)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
@@ -95,8 +96,13 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
                 binding.cardView.logo.setImageResource(R.drawable.logo_linkedin)
                 binding.cardView.auxiliary_label.visibility = View.INVISIBLE
                 binding.cardView.auxiliary_value.visibility = View.INVISIBLE
+                if (card?.qrCode.isNullOrBlank()) {
+                    binding.cardView.img_qr_code.visibility = View.VISIBLE
+                    binding.cardView.button_edit_qr.visibility = View.VISIBLE
+                } else {
+                    qrCodeContent = card?.qrCode!!
+                }
                 //qrCodeContent = "https://www.linkedin.com/in/${cardViewModel.primaryValue}/"
-                qrCodeContent = card?.qrCode ?: ""
             }
         }
 
@@ -105,16 +111,19 @@ class CardViewHolder private constructor(private val binding: ItemCardBinding) :
         } else {
             binding.cardView.thumbnail.setImageResource(R.drawable.profile)
         }
-        val qrgEncoder = QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
+        if (!card?.qrCode.isNullOrBlank()) {
+            val qrgEncoder =
+                QRGEncoder(qrCodeContent, null, QRGContents.Type.TEXT, smallerDimension)
 
-        try {
-            // Getting QR-Code as Bitmap
+            try {
+                // Getting QR-Code as Bitmap
 
-            val bitmap = qrgEncoder.encodeAsBitmap()
-            // Setting Bitmap to ImageView
-            binding.imgQrCode.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
-            Log.v("CardViewHolder", e.toString())
+                val bitmap = qrgEncoder.encodeAsBitmap()
+                // Setting Bitmap to ImageView
+                binding.imgQrCode.setImageBitmap(bitmap)
+            } catch (e: WriterException) {
+                Log.v("CardViewHolder", e.toString())
+            }
         }
     }
 }

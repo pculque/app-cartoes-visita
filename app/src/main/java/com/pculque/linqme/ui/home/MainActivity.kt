@@ -26,6 +26,7 @@ import com.pculque.linqme.ui.detail.DetailActivity
 import com.pculque.linqme.ui.home.adapter.Card
 import com.pculque.linqme.ui.home.adapter.CardViewModel
 import com.pculque.linqme.ui.home.adapter.StackCardAdapter
+import com.pculque.linqme.ui.home.adapter.TypeCard
 import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.apply {
-            // submitList(getCardViewModel())
+            submitList(getCardViewModel())
         }
     }
 
@@ -123,9 +124,21 @@ class MainActivity : AppCompatActivity() {
                     }, secondaryLabel = MutableLiveData<String>().apply {
                         postValue(it.secondaryLabel)
                     }, secondaryValue = MutableLiveData<String>().apply {
-                        postValue(it.secondaryValue)
+                        if (it.getTypeId() == TypeCard.YOUTUBE && it.secondaryValue.isEmpty())
+                            postValue("Digite o ID do seu canal")
+                        else if (it.getTypeId() == TypeCard.INSTAGRAM && it.secondaryValue.isEmpty())
+                            postValue("Digite o ID da sua conta (@meu_id)")
+                        else if (it.getTypeId() == TypeCard.WHATSAPP && it.secondaryValue.isEmpty())
+                            postValue("Digite o seu número")
+                        else if (it.getTypeId() == TypeCard.LINKEDIN && it.secondaryValue.isEmpty())
+                            postValue("Digite o seu cargo")
+                        else
+                            postValue(it.secondaryValue)
                     }, primaryValue = MutableLiveData<String>().apply {
-                        postValue(it.primaryValue)
+                        if (it.primaryValue.isEmpty())
+                            postValue("Digite o seu Nome")
+                        else
+                            postValue(it.primaryValue)
                     }, auxiliaryLabel = MutableLiveData<String>().apply {
                         postValue(it.auxiliaryLabel)
                     }, bitmap = MutableLiveData<Bitmap>().apply {
@@ -188,13 +201,6 @@ class MainActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun AppCompatActivity.startActivityWithOptions(
-        options: ActivityOptionsCompat,
-        function: (context: Context) -> Intent
-    ) {
-        startActivity(function(applicationContext), options.toBundle())
     }
 
 }

@@ -6,12 +6,12 @@
     "backgroundColor": "#FF0004",
     "labelColor": "#FFFFFF",
     "valueColor": "#FFFFFF",
-    "primaryValue": "Seu Nome",
+    "primaryValue": "",
     "secondaryLabel": "Canal",
-    "secondaryValue": "Id do seu Canal",
+    "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": "",
-    "qr_code": "https://www.youtube.com/user/url-do-seu-canal-aqui"
+    "qr_code": ""
   },
   {
     "type": 2,
@@ -20,12 +20,12 @@
     "backgroundColor": "#3C5A99",
     "labelColor": "#FFFFFF",
     "valueColor": "#FFFFFF",
-    "primaryValue": "Seu Nome",
+    "primaryValue": "",
     "secondaryLabel": "",
     "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": "",
-    "qr_code": "https://www.facebook.com/seu-nome-aqui"
+    "qr_code": ""
   },
   {
     "type": 3,
@@ -34,9 +34,9 @@
     "backgroundColor": "#FFFFFF",
     "labelColor": "#212121",
     "valueColor": "#212121",
-    "primaryValue": "Seu Nome",
+    "primaryValue": "",
     "secondaryLabel": "FOLLOW",
-    "secondaryValue": "@meu_id",
+    "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   },
@@ -47,9 +47,9 @@
     "backgroundColor": "#1EBEA5",
     "labelColor": "#FFFFFF",
     "valueColor": "#FFFFFF",
-    "primaryValue": "Seu Nome",
+    "primaryValue": "",
     "secondaryLabel": "Mobile",
-    "secondaryValue": "Seu numero",
+    "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": ""
   },
@@ -60,11 +60,11 @@
     "backgroundColor": "#0077B5",
     "labelColor": "#FFFFFF",
     "valueColor": "#FFFFFF",
-    "primaryValue": "Nome Completo",
-    "secondaryLabel": "Empresa",
-    "secondaryValue": "Cargo ",
+    "primaryValue": "",
+    "secondaryLabel": "Digite o nome da sua empresa",
+    "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": "",
-    "qr_code": "https://www.linkedin.com/in/complete-sua-url"
+    "qr_code": ""
   }
 ]
