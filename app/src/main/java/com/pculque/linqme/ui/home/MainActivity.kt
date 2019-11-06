@@ -1,6 +1,5 @@
 package com.pculque.linqme.ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -9,12 +8,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.amyu.stack_card_layout_manager.StackCardLayoutManager
 import com.pculque.linqme.database.CardHelper
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,10 +20,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
 import com.pculque.linqme.*
 import com.pculque.linqme.ui.detail.DetailActivity
-import com.pculque.linqme.ui.home.adapter.Card
-import com.pculque.linqme.ui.home.adapter.CardViewModel
-import com.pculque.linqme.ui.home.adapter.StackCardAdapter
-import com.pculque.linqme.ui.home.adapter.TypeCard
+import com.pculque.linqme.ui.home.adapter.*
 import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
