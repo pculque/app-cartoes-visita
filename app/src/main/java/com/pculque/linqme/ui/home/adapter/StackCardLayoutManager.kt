@@ -20,6 +20,10 @@ package com.pculque.linqme.ui.home.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.pculque.linqme.R
+import android.app.Activity
+import android.util.DisplayMetrics
+import android.content.Context
+import kotlin.math.roundToInt
 
 
 class StackCardLayoutManager(
@@ -74,6 +78,8 @@ class StackCardLayoutManager(
             return@also
         }
 
+        //For 40% height according to the screen width.
+
         addedChildren.forEachIndexed { index, view ->
             val initializedTop = view.getTag(InitializedPosition.TOP.key) as Int
             val layoutParams = view.layoutParams as RecyclerView.LayoutParams
@@ -88,4 +94,20 @@ class StackCardLayoutManager(
     private enum class InitializedPosition(val key: Int) {
         TOP(R.integer.top)
     }
+    //For 40% height according to the screen width.
+    //(int) (getScreenWidth(mContext) * 0.40);
+
+    fun getScreenWidth(context: Context): Int {
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels
+    }
+
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources
+            .displayMetrics
+            .density
+        return (dp.toFloat() * density).roundToInt()
+    }
+
 }
