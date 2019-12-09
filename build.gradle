@@ -5,6 +5,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
@@ -14,6 +18,8 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'io.fabric.tools:gradle:1.+'
 
+        classpath 'com.google.gms:google-services:3.1.0'
+
     }
 }
 
@@ -21,7 +27,8 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url "http://nexus.hands.com.br/repository/maven-repository/" }
+
     }
 }
 

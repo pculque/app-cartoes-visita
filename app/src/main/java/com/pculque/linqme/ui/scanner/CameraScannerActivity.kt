@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import com.pculque.linqme.R
 import android.content.ActivityNotFoundException
+ import android.util.Log
 import com.pculque.linqme.ui.detail.toast
 
 
@@ -46,9 +47,18 @@ class CameraScannerActivity : AppCompatActivity() {
 
                 try {
                     // Your startActivity code wich throws exception
-                    val message = it.text
+                    val message = it.text.trim()
+                    Log.e("LEITOR", message.trim())
+
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message))
+                    intent.type = "text/vcard"
                     startActivity(intent)
+                    finish()
+                    //val intent = Intent(Intent.ACTION_VIEW)
+                    //val shareUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, message)
+                    //intent.type = ContactsContract.Contacts.CONTENT_VCARD_TYPE
+                    // intent.putExtra(Intent.EXTRA_STREAM, shareUri)
+                    //startActivity(intent)
                 } catch (activityNotFound: ActivityNotFoundException) {
                     // Now, You can catch the exception here and do what you want
                     toast("Houve um erro ao ler seu qr code :c ")

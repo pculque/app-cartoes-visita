@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.TermActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Termos e Condições"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="“Nos termos da Lei n⁰ 12.965, de 23 de abril de 2014
+(“Marco Civil da Internet”) e do Decreto n⁰ 8.771, de 11 de
+maio de 2016, (“Decreto 8.771”) nossa aplicação permite a
+coleta por terceiros autorizados de alguns dados anônimos
+associados ao seu aparelho, tais como: (i) status da bateria; (ii)
+modelo; (iii) sistema operacional; (iv) apps instalados; (v) tipo de
+conexão (dados celular ou wi-fi); e (vi) geolocalização. A
+finalidade exclusiva desta coleta e posterior processamento de
+dados é oferecer publicidade mais relevante aos seus
+interesses e perfil. Caso não queira que estes dados sejam
+coletados, você deve alterar as configurações de privacidade do
+seu aparelho. AO UTILIZAR OS WEBSITES, PLATAFORMAS
+OU APLICAÇÕES DE INTERNET, VOCÊ CONCORDA
+EXPRESSA E INTEGRALMENTE COM ESTA POLÍTICA DE
+PRIVACIDADE, COMO CONDIÇÃO INDISPENSÁVEL À
+UTILIZAÇÃO DE SUAS FUNCIONALIDADES E SERVIÇOS,
+NOS TERMOS DO MARCO CIVIL DA INTERNET, DO
+DECRETO 8.771, BEM COMO, DAS DIRETRIZES DO COMITÊ
+GESTOR DA INTERNET NO BRASIL (CGI.BR). NOS TERMOS
+DO INCISO IX, ARTIGO 7º DO MARCO CIVIL DA INTERNET,
+ASSEGURAMOS AO USUÁRIO O DIREITO DE CONSENTIR,
+EXPRESSAMENTE, SOBRE A COLETA, USO,
+ARMAZENAMENTO E TRATAMENTO DE DADOS PESSOAIS”."
+                android:textColor="@color/colorBlack" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="CANCELAR"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnAccept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Aceitar"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

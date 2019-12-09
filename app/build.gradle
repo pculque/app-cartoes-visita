@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'io.fabric'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -16,6 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -93,4 +96,7 @@ dependencies {
 
     //COMPRESSOR IMAGE
     implementation 'id.zelory:compressor:2.1.0'
+
+    // MDM Bundle
+    implementation "br.com.hands.mdm.libs.android:mdm-bundle:3.4.0"
 }

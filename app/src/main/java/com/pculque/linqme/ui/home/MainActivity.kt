@@ -12,34 +12,43 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.pculque.linqme.database.CardHelper
+import com.pculque.linqme.data.CardHelper
 
 import kotlinx.android.synthetic.main.activity_main.*
 
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
 import com.pculque.linqme.*
+import com.pculque.linqme.data.PreferenceHelper
+import com.pculque.linqme.data.PreferenceHelper.readTerm
+import com.pculque.linqme.ui.TermActivity
 import com.pculque.linqme.ui.detail.DetailActivity
 import com.pculque.linqme.ui.home.adapter.*
 import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
 
+
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val MAX_ITEM_COUNT: Int = 6
+        const val RESULT_CODE = 3
     }
 
     private val dbHandler = CardHelper(this)
     lateinit var adapter: StackCardAdapter
 
+
     private fun startDetail(cardViewModel: CardViewModel) {
-        val intent = Intent(this, DetailActivity::class.java)
+        // val intent = Intent(this, DetailActivity::class.java)
         val id = cardViewModel.id
 
+        val intent = Intent(this, DetailActivity::class.java)
+        Log.d("onActivityResult", "startDetail")
+
         intent.putExtra("card_id", id)
-        startActivity(intent)
+        startActivityForResult(intent, RESULT_CODE)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         adapter.apply {
-            onItemClickListener = { cardView, cardViewModel ->
+            onItemClickListener = { _, cardViewModel ->
                 /* val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                      this@MainActivity,
                      cardView,
@@ -94,12 +103,24 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         itemDecor.attachToRecyclerView(recyclerView)
+
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.apply {
-            submitList(getCardViewModel())
+        val prefs = PreferenceHelper.customPreference(this)
+
+        if (!prefs.readTerm)
+            startActivity(Intent(this, TermActivity::class.java))
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_CODE) {
+            adapter.apply {
+                submitList(getCardViewModel())
+            }
         }
     }
 

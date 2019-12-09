@@ -1,19 +1,5 @@
 [
   {
-    "type": 1,
-    "thumbnail": 1,
-    "logo": 1,
-    "backgroundColor": "#FF0004",
-    "labelColor": "#FFFFFF",
-    "valueColor": "#FFFFFF",
-    "primaryValue": "",
-    "secondaryLabel": "Canal",
-    "secondaryValue": "",
-    "auxiliaryLabel": "",
-    "auxiliaryValue": "",
-    "qr_code": ""
-  },
-  {
     "type": 2,
     "thumbnail": 2,
     "logo": 2,
@@ -62,6 +48,20 @@
     "valueColor": "#FFFFFF",
     "primaryValue": "",
     "secondaryLabel": "Digite o nome da sua empresa",
+    "secondaryValue": "",
+    "auxiliaryLabel": "",
+    "auxiliaryValue": "",
+    "qr_code": ""
+  },
+  {
+    "type": 1,
+    "thumbnail": 1,
+    "logo": 1,
+    "backgroundColor": "#FF0004",
+    "labelColor": "#FFFFFF",
+    "valueColor": "#FFFFFF",
+    "primaryValue": "",
+    "secondaryLabel": "Canal",
     "secondaryValue": "",
     "auxiliaryLabel": "",
     "auxiliaryValue": "",

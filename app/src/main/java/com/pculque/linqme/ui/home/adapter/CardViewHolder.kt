@@ -15,7 +15,7 @@ import android.graphics.Point
 import android.view.View
 import android.view.WindowManager
 import com.pculque.linqme.R
-import com.pculque.linqme.database.CardHelper
+import com.pculque.linqme.data.CardHelper
 import com.pculque.linqme.util.EncodeUtils
 import kotlinx.android.synthetic.main.item_card.view.*
 

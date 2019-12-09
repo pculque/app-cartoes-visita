@@ -39,7 +39,8 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.pculque.linqme.ui.home.adapter.Card
 import com.pculque.linqme.R
 import com.pculque.linqme.ui.home.adapter.TypeCard
-import com.pculque.linqme.database.CardHelper
+import com.pculque.linqme.data.CardHelper
+import com.pculque.linqme.ui.home.MainActivity
 import com.pculque.linqme.util.EncodeUtils
 import java.util.*
 
@@ -332,7 +333,6 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
             findViewById<ImageView>(R.id.thumbnail).apply {
                 val file = File(images.first().path)
                 val imageBitmap = customCompressImage(file)
-                //setImageURI(Uri.parse(images.first().path))
                 val string64 = EncodeUtils.convertToBase64(imageBitmap)
                 Log.e(TAG, "Id: $cardId")
                 val card = dbHandler.getCard(cardId)
@@ -543,6 +543,7 @@ class DetailActivity : AppCompatActivity(), ColorPickerDialogListener {
                 true
             }
             android.R.id.home -> {
+                setResult(MainActivity.RESULT_CODE, intent)
                 finish()
                 true
             }

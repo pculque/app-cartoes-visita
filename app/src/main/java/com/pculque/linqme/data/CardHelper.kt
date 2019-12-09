@@ -1,4 +1,4 @@
-package com.pculque.linqme.database
+package com.pculque.linqme.data
 
 import android.content.ContentValues
 import android.content.Context
