@@ -27,6 +27,9 @@ import com.pculque.linqme.ui.home.adapter.*
 import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -103,15 +106,29 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         itemDecor.attachToRecyclerView(recyclerView)
-
+        val prefs = PreferenceHelper.customPreference(this)
+        prefs.readTerm = false
     }
 
     override fun onResume() {
         super.onResume()
         val prefs = PreferenceHelper.customPreference(this)
 
-        if (!prefs.readTerm)
-            startActivity(Intent(this, TermActivity::class.java))
+        if (!prefs.readTerm) {
+            alert("Ao utilizar o nosso App você aceita os termos de uso") {
+                title = "Termos e Condições"
+                positiveButton("Aceitar") {
+                    prefs.readTerm = true
+                }
+                negativeButton("Cancelar") {
+                    recuseTermActivity()
+                }
+                neutralPressed("Ler mais...") {
+                    openTermActivity()
+                }
+            }.show()
+        }
+        //  startActivity(Intent(this, TermActivity::class.java))
 
     }
 
@@ -122,6 +139,20 @@ class MainActivity : AppCompatActivity() {
                 submitList(getCardViewModel())
             }
         }
+    }
+
+    private fun openTermActivity() {
+        startActivity(Intent(this, TermActivity::class.java))
+    }
+
+    private fun recuseTermActivity() {
+        val prefs = PreferenceHelper.customPreference(this)
+
+        prefs.readTerm = false
+        val homeIntent = Intent(Intent.ACTION_MAIN)
+        homeIntent.addCategory(Intent.CATEGORY_HOME)
+        homeIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(homeIntent)
     }
 
     private fun getCardViewModel(): List<CardViewModel> {
