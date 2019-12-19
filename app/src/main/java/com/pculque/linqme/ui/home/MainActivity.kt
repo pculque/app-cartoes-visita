@@ -115,10 +115,6 @@ class MainActivity : AppCompatActivity() {
         itemDecor.attachToRecyclerView(recyclerView)
         //val prefs = PreferenceHelper.customPreference(this)
         //prefs.readTerm = false
-    }
-
-    override fun onResume() {
-        super.onResume()
         val prefs = PreferenceHelper.customPreference(this)
 
         if (!prefs.readTerm) {
@@ -135,6 +131,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }.show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         //  startActivity(Intent(this, TermActivity::class.java))
 
     }
