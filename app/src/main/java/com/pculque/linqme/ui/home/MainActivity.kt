@@ -28,8 +28,12 @@ import com.pculque.linqme.ui.scanner.CameraScannerActivity
 import com.pculque.linqme.util.AppConstants
 import com.pculque.linqme.util.FileUtils
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.noButton
-import org.jetbrains.anko.toast
+import br.com.hands.mdm.libs.android.geobehavior.MDMGeoBehavior
+import android.content.pm.PackageManager
+import androidx.annotation.NonNull
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,6 +61,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // Pedir permissão de Geolocalização ao usuário e inicia o módulo de GeoBehavior
+        requestGeoTrackingPermissions()
+
         setSupportActionBar(toolbar)
         adapter = StackCardAdapter(this)
         supportActionBar.apply {
@@ -246,6 +253,52 @@ class MainActivity : AppCompatActivity() {
             }
 
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // Método exemplo para pedir permissão de geolocalização
+    private fun requestGeoTrackingPermissions() {
+        // Verifica Google Play Services
+        val googleAPI = GoogleApiAvailability.getInstance()
+        val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(this, result, 9000).show()
+            }
+            // Usuário precisa atualizar o Google Play Services
+            return
+        }
+
+        // Verifica permissão de geolocalização
+        if (ActivityCompat.checkSelfPermission(
+                applicationContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                applicationContext,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Requisitar permissão de geolocalização
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                200
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (200 == requestCode && grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Permissão concedida, inicializar módulo GeoBehavior
+                MDMGeoBehavior.start(applicationContext)
+            } else {
+                // Permissão não concedida
+            }
         }
     }
 
