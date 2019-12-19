@@ -113,8 +113,8 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         itemDecor.attachToRecyclerView(recyclerView)
-        val prefs = PreferenceHelper.customPreference(this)
-        prefs.readTerm = false
+        //val prefs = PreferenceHelper.customPreference(this)
+        //prefs.readTerm = false
     }
 
     override fun onResume() {

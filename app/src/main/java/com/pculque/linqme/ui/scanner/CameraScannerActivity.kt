@@ -11,7 +11,7 @@ import android.net.Uri
 import android.os.Build
 import com.pculque.linqme.R
 import android.content.ActivityNotFoundException
- import android.util.Log
+import android.util.Log
 import com.pculque.linqme.ui.detail.toast
 
 
@@ -48,10 +48,10 @@ class CameraScannerActivity : AppCompatActivity() {
                 try {
                     // Your startActivity code wich throws exception
                     val message = it.text.trim()
-                    Log.e("LEITOR", message.trim())
+                    //Log.e("LEITOR", message.trim())
 
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(message))
-                    intent.type = "text/vcard"
+                    //intent.type = "text/vcard"
                     startActivity(intent)
                     finish()
                     //val intent = Intent(Intent.ACTION_VIEW)
