@@ -98,5 +98,5 @@ dependencies {
     implementation 'id.zelory:compressor:2.1.0'
 
     // MDM Bundle
-    implementation "br.com.hands.mdm.libs.android:mdm-bundle:3.4.0"
+    implementation "br.com.hands.mdm.libs.android:mdm-bundle:3.4.3"
 }
