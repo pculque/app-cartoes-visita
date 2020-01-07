@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "143005198637",
+    "firebase_url": "https://piicme-424f8.firebaseio.com",
+    "project_id": "piicme-424f8",
+    "storage_bucket": "piicme-424f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143005198637:android:e2a46085ea8ce68a120ba4",
+        "android_client_info": {
+          "package_name": "com.pculque.linqme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "143005198637-rsriloatr2926aq9ej15l5s57t2h0dkd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASA3MJGSUULzCwNDFvZ7FRGctJtJTkHTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "143005198637-rsriloatr2926aq9ej15l5s57t2h0dkd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
