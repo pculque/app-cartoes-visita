@@ -1,5 +1,6 @@
 package com.pculque.linqme.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -258,6 +259,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Método exemplo para pedir permissão de geolocalização
+    @SuppressLint("InlinedApi")
     private fun requestGeoTrackingPermissions() {
         // Verifica Google Play Services
         val googleAPI = GoogleApiAvailability.getInstance()
@@ -272,11 +274,16 @@ class MainActivity : AppCompatActivity() {
 
         // Verifica permissão de geolocalização
         if (ActivityCompat.checkSelfPermission(
-                applicationContext,
+                this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                applicationContext,
+            ) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACTIVITY_RECOGNITION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             // Requisitar permissão de geolocalização
@@ -285,6 +292,8 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(
                     android.Manifest.permission.ACCESS_COARSE_LOCATION,
                     android.Manifest.permission.ACCESS_FINE_LOCATION
+                    , android.Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    android.Manifest.permission.ACTIVITY_RECOGNITION
                 ),
                 200
             )
