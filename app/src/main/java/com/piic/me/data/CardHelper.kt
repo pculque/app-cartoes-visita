@@ -1,10 +1,10 @@
-package com.pculque.linqme.data
+package com.piic.me.data
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
-import com.pculque.linqme.ui.home.adapter.Card
+import com.piic.me.ui.home.adapter.Card
 
 
 class CardHelper(context: Context) {

@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.home.adapter
+package com.piic.me.ui.home.adapter
 
 import java.io.Serializable
 

@@ -1,10 +1,9 @@
-package com.pculque.linqme.ui.home.adapter
+package com.piic.me.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.pculque.linqme.databinding.ItemCardBinding
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import com.google.zxing.WriterException
@@ -14,9 +13,10 @@ import android.content.Context.WINDOW_SERVICE
 import android.graphics.Point
 import android.view.View
 import android.view.WindowManager
-import com.pculque.linqme.R
-import com.pculque.linqme.data.CardHelper
-import com.pculque.linqme.util.EncodeUtils
+import com.piic.me.databinding.ItemCardBinding
+import com.piic.me.R
+import com.piic.me.data.CardHelper
+import com.piic.me.util.EncodeUtils
 import kotlinx.android.synthetic.main.item_card.view.*
 
 class CardViewHolder private constructor(private val binding: ItemCardBinding) :

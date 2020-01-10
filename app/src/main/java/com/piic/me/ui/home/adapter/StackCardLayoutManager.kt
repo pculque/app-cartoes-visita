@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.home.adapter
+package com.piic.me.ui.home.adapter
 
 /*
  * Copyright (C) 2018 amyu.
@@ -19,7 +19,7 @@ package com.pculque.linqme.ui.home.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.pculque.linqme.R
+import com.piic.me.R
 import android.app.Activity
 import android.util.DisplayMetrics
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.home
+package com.piic.me.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,21 +13,21 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.pculque.linqme.data.CardHelper
+import com.piic.me.data.CardHelper
 
 import kotlinx.android.synthetic.main.activity_main.*
 
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.`$Gson$Types`
-import com.pculque.linqme.*
-import com.pculque.linqme.data.PreferenceHelper
-import com.pculque.linqme.data.PreferenceHelper.readTerm
-import com.pculque.linqme.ui.TermActivity
-import com.pculque.linqme.ui.detail.DetailActivity
-import com.pculque.linqme.ui.home.adapter.*
-import com.pculque.linqme.ui.scanner.CameraScannerActivity
-import com.pculque.linqme.util.AppConstants
-import com.pculque.linqme.util.FileUtils
+import com.piic.me.*
+import com.piic.me.data.PreferenceHelper
+import com.piic.me.data.PreferenceHelper.readTerm
+import com.piic.me.ui.TermActivity
+import com.piic.me.ui.detail.DetailActivity
+import com.piic.me.ui.home.adapter.*
+import com.piic.me.ui.scanner.CameraScannerActivity
+import com.piic.me.util.AppConstants
+import com.piic.me.util.FileUtils
 import org.jetbrains.anko.alert
 import br.com.hands.mdm.libs.android.geobehavior.MDMGeoBehavior
 import android.content.pm.PackageManager
@@ -35,6 +35,7 @@ import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.piic.me.ui.home.adapter.*
 
 
 class MainActivity : AppCompatActivity() {

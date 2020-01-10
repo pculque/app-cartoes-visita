@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.scanner
+package com.piic.me.ui.scanner
 
 import android.Manifest
 import android.content.Intent
@@ -9,10 +9,9 @@ import com.budiyev.android.codescanner.CodeScanner
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import com.pculque.linqme.R
+import com.piic.me.R
 import android.content.ActivityNotFoundException
-import android.util.Log
-import com.pculque.linqme.ui.detail.toast
+import com.piic.me.ui.detail.toast
 
 
 class CameraScannerActivity : AppCompatActivity() {

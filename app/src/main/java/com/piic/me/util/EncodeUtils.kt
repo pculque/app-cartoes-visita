@@ -1,4 +1,4 @@
-package com.pculque.linqme.util
+package com.piic.me.util
 
 import android.graphics.*
 import android.util.Base64

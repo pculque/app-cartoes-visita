@@ -1,4 +1,4 @@
-package com.pculque.linqme.ui.detail
+package com.piic.me.ui.detail
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -36,12 +36,12 @@ import com.esafirm.imagepicker.features.ImagePicker
 import com.esafirm.imagepicker.model.Image
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-import com.pculque.linqme.ui.home.adapter.Card
-import com.pculque.linqme.R
-import com.pculque.linqme.ui.home.adapter.TypeCard
-import com.pculque.linqme.data.CardHelper
-import com.pculque.linqme.ui.home.MainActivity
-import com.pculque.linqme.util.EncodeUtils
+import com.piic.me.ui.home.adapter.Card
+import com.piic.me.R
+import com.piic.me.ui.home.adapter.TypeCard
+import com.piic.me.data.CardHelper
+import com.piic.me.ui.home.MainActivity
+import com.piic.me.util.EncodeUtils
 import java.util.*
 
 import id.zelory.compressor.Compressor

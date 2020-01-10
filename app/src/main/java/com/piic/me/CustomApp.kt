@@ -1,4 +1,4 @@
-package com.pculque.linqme
+package com.piic.me
 
 import android.app.Application
 import br.com.hands.mdm.libs.android.bundle.MDMBundle

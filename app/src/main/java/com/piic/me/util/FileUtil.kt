@@ -1,4 +1,4 @@
-package com.pculque.linqme.util
+package com.piic.me.util
 
 internal object FileUtil {
     private const val EOF = -1

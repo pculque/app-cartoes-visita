@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="com.pculque.linqme.ui.home.adapter.CardViewModel" />
+            type="com.piic.me.ui.home.adapter.CardViewModel" />
 
         <import type="androidx.core.content.ContextCompat" />
     </data>
