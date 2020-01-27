@@ -11,9 +11,10 @@ class CustomApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        //if (!BuildConfig.DEBUG)
-        Fabric.with(this, Crashlytics())
+        if (BuildConfig.DEBUG)
         MDMCore.setDebugMode(true)
+
+        Fabric.with(this, Crashlytics())
 
         // Start do Bundle com todos os módulos
         MDMBundle.start(this)
